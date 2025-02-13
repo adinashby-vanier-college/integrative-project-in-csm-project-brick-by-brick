@@ -17,10 +17,10 @@ public class Driver {
      * The main method which serves as the entry point for running test cases.
      *
      * The actual testing logic is yet to be implemented as indicated by the
-     * TODO comment.
+     *  TODO comment.
      *
      * @param args Command-line arguments (if any) passed to the program
-     * (currently unused in this method).
+     *  (currently unused in this method).
      */
     public static void main(String[] args) {
         logger.info("Running test cases...");

@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 /**
- *
+ * A helper class for loading FXML files.
  * @author frostybee
  */
 public class FxUIHelper {
@@ -17,11 +17,11 @@ public class FxUIHelper {
      * controller.
      *
      * @param fxmFileName The the FXML file name to be loaded (without the .fxml
-     * extension).
+     *  extension).
      * @return The Parent node corresponding to the loaded FXML file, which can
-     * be used as the root of a scene.
+     *  be used as the root of a scene.
      * @throws IOException If an error occurs during the loading of the FXML
-     * file.
+     *  file.
      */
     public static Parent loadFXML(String fxmFileName) throws IOException {
         return loadFXML(fxmFileName, null);
@@ -31,13 +31,13 @@ public class FxUIHelper {
      * Loads the specified FXML file and sets the supplied FXML controller.
      *
      * @param fxmFileName The the FXML file name to be loaded (without the .fxml
-     * extension).
+     *  extension).
      * @param fxmlController The instance of an FXML controller to be associated
-     * with the FXML file.
+     *  with the FXML file.
      * @return The Parent node corresponding to the loaded FXML file, which can
-     * be used as the root of a scene.
+     *  be used as the root of a scene.
      * @throws IOException If an error occurs during the loading of the FXML
-     * file.
+     *  file.
      */
     public static Parent loadFXML(String fxmFileName, Object fxmlController)
             throws IOException {
