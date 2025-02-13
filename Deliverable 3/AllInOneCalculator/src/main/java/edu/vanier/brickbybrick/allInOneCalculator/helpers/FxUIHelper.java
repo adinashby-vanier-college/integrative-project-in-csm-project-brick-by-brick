@@ -1,4 +1,4 @@
-package edu.vanier.template.helpers;
+package edu.vanier.brickbybrick.allInOneCalculator.helpers;
 
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +9,6 @@ import javafx.scene.Parent;
  * @author frostybee
  */
 public class FxUIHelper {
-
     /**
      * Load an FXML file.
      *

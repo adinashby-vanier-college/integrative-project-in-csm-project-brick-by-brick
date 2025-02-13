@@ -1,9 +1,9 @@
-package edu.vanier.template.ui;
+package edu.vanier.brickbybrick.allInOneCalculator.ui;
 
-import edu.vanier.template.controllers.MainAppFXMLController;
-import edu.vanier.template.controllers.SceneController;
-import edu.vanier.template.controllers.SecondaryFXMLController;
-import edu.vanier.template.helpers.FxUIHelper;
+import edu.vanier.brickbybrick.allInOneCalculator.controllers.MainAppFXMLController;
+import edu.vanier.brickbybrick.allInOneCalculator.controllers.SceneController;
+import edu.vanier.brickbybrick.allInOneCalculator.controllers.SecondaryFXMLController;
+import edu.vanier.brickbybrick.allInOneCalculator.helpers.FxUIHelper;
 import java.io.IOException;
 import java.util.logging.Level;
 import javafx.application.Application;
@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
  * @author frostybee.
  */
 public class MainApp extends Application {
-
     // The FXML file name of the primary scene.
     public static final String MAINAPP_SCENE = "MainApp_layout";
     // The FXML file name of the secondary scene.

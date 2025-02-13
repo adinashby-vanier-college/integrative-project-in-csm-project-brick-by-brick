@@ -1,7 +1,7 @@
 package edu.vanier;
 
-import edu.vanier.template.ui.MainApp;
-import edu.vanier.template.tests.*;
+import edu.vanier.brickbybrick.allInOneCalculator.tests.Driver;
+import edu.vanier.brickbybrick.allInOneCalculator.ui.MainApp;
 
 /**
  * The Launcher class serves as the entry point to the application.
@@ -11,7 +11,6 @@ import edu.vanier.template.tests.*;
  * class (e.g., {@link Driver}) in the future.
  */
 public class Launcher {
-
     /**
      * The entry point of the application that invokes the
      * {@link MainApp#main(String[])} method to start the FX main application.

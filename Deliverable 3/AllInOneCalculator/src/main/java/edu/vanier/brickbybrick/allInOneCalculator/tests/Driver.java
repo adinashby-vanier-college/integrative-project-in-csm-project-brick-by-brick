@@ -1,4 +1,4 @@
-package edu.vanier.template.tests;
+package edu.vanier.brickbybrick.allInOneCalculator.tests;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
  * @author frostybee
  */
 public class Driver {
-
     // Logger instance for logging messages
     private final static Logger logger = LoggerFactory.getLogger(Driver.class);
 

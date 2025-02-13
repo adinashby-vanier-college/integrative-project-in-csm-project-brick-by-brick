@@ -1,4 +1,4 @@
-package edu.vanier.template.controllers;
+package edu.vanier.brickbybrick.allInOneCalculator.controllers;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +13,6 @@ import java.util.HashMap;
  * @author frostybee
  */
 public class SceneController {
-
     private final HashMap<String, Parent> scenesMap = new HashMap<>();
     private final Scene mainScene;
 

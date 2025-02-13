@@ -1,6 +1,6 @@
-package edu.vanier.template.controllers;
+package edu.vanier.brickbybrick.allInOneCalculator.controllers;
 
-import edu.vanier.template.ui.MainApp;
+import edu.vanier.brickbybrick.allInOneCalculator.ui.MainApp;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
  * @author frostybee
  */
 public class MainAppFXMLController {
-
     private final static Logger logger = LoggerFactory.getLogger(MainAppFXMLController.class);
 
     @FXML
