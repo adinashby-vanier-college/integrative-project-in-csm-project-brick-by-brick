@@ -1,4 +1,4 @@
-package edu.vanier.brickbybrick.allInOneCalculator.ui;
+package edu.vanier.brickbybrick.allInOneCalculator;
 
 import edu.vanier.brickbybrick.allInOneCalculator.controllers.*;
 import edu.vanier.brickbybrick.allInOneCalculator.helpers.FxUIHelper;
