@@ -5,4 +5,4 @@
  * @see <a href="https://craftinginterpreters.com/the-lox-language.html">Crafting Interpreters - The Lox Language</a>
  * @see <a href="https://craftinginterpreters.com/a-tree-walk-interpreter.html">Crafting Interpreters - A Tree-Walk Interpreter</a>
  */
-package edu.vanier.brickbybrick.allinonecalculator.calcLox;
+package edu.vanier.brickbybrick.allinonecalculator.calclox;

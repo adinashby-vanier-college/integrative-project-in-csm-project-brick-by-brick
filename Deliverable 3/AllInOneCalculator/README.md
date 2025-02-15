@@ -12,7 +12,7 @@ For more detailed information about each package, refer to the Javadoc contained
 
 ```
 java.edu.vanier.brickbybrick.allinonecalculator
-├── calcLox: The language interperter for calcLox, a modified (simplified) version of Lox designed for the programmable feature of the calculator.
+├── calclox: The language interperter for calcLox, a modified (simplified) version of Lox designed for the programmable feature of the calculator.
 ├── controllers: The package for all the JavaFX FXML controllers.
 ├── helpers: The package for all the helper classes that are used.
 ├── logic: The backend logics of the calculator (both arithmetic and graphing), including arithmetic operations, graphing engine, etc.
