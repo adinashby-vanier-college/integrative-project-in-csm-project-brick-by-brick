@@ -1,4 +1,4 @@
-package edu.vanier.brickbybrick.allInOneCalculator.controllers;
+package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;

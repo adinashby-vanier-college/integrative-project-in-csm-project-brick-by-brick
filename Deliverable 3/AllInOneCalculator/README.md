@@ -1,40 +1,33 @@
-# JavaFX Project Template
+# All-in-One Calculator
 
-This is a non-modular, Gradle-based project skeleton for creating JavaFX applications.
+Brick by Brick (CiHao Zhang, Lucas Chauveau, Qian Qian), Vanier College 420-204-RE Final Project, Winter 2025
 
-It uses `JavaFX 20.0.2`, and includes the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) (no need to install Gradle locally).
+This project **HAVE** be run on **Java 21**.
 
-## Features
+## Project Structure
 
-- JavaFX-aware coding assistance (code completion, search, navigation in JavaFX-specific source files)
-- Logging with [Logback](https://logback.qos.ch/).
-- Support for FXML.
-- Access to JavaFX's JavaDoc from within your IDE.
-- Font icons provided by [Ikonli](https://kordamp.org/ikonli/)
+This is a diagram of the project's structure, mainly describing the structure of the packages without the details of the classes (as those would be described in the Javadoc of the classes themselves).
 
-## How Do I Use this Project Template
+For more detailed information about each package, refer to the Javadoc contained in the `package-info.java` of the package.
 
-1. Download this repository as `.zip` file.
-2. Unzip the downloaded `javafx-template-main.zip` file.
-3. Add the extracted files to your GitHub repo (if you already have one)
-4. Open the project with NetBeans
-5. Using NetBeans, build the project to download/resolve the dependencies
-6. Change the project name in `settings.gradle`
-7. Rename the default Java package `edu.vanier.template` to `edu.vanier.projectname` in `MainApp.java` and `MainAppFXMLController.java`.
-
-
-## How Do I Run Multiple Main Methods?
-
-To execute the main method of a class other than MainApp, you should do so within the `edu.vanier.Launcher` class. For further details, please refer to the examples and comments provided in that class.
-
-**Note:** The `mainClass` property in the `build.gradle` is configured to run the main method of the Launcher class (as shown below):
-
-```gradle
-application {
-   mainClass = 'edu.vanier.Launcher'   
-}
+```
+java.edu.vanier.brickbybrick.allinonecalculator
+├── calcLox: The language interperter for calcLox, a modified (simplified) version of Lox designed for the programmable feature of the calculator.
+├── controllers: The package for all the JavaFX FXML controllers.
+├── helpers: The package for all the helper classes that are used.
+├── logic: The backend logics of the calculator (both arithmetic and graphing), including arithmetic operations, graphing engine, etc.
+├── tests: The package containing all the tests for logical/mathematical/algorithmic methods.
+├── MainApp: The main JavaFX application class that handles init, stop, and scene switching.
 ```
 
-## IDEs and JDK
+## Libraries Used
 
-This project template was tested with `Apache NetBeans 2`, IntelliJ Community Edition 2024.2.02, and `JDK 22`.
+### Java
+
+- JavaFX 22.0.2 - Java GUI Library
+- Logback 1.4.11 - Logging Library
+
+## Resources/Credits
+
+- [JavaFX Project Template](https://github.com/frostybee/javafx-template) by [@frostybee](https://github.com/frostybee).
+- [Crafting Interpreters](https://craftinginterpreters.com/) by Bob Nystrom. This book introduces the [Lox language](https://craftinginterpreters.com/the-lox-language.html), the language that `calcLox`, the programming language that powers the programmable feature of the calculator, is based on (`calcLox` is a simplified version of Lox, without some features like classes and inheritance). This book also contains [a guide for building a tree-walk interpreter](https://craftinginterpreters.com/a-tree-walk-interpreter.html), which was used as a reference for building the interpreter for `calcLox`.

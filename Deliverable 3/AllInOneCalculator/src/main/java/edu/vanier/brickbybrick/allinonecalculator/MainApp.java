@@ -1,7 +1,7 @@
-package edu.vanier.brickbybrick.allInOneCalculator;
+package edu.vanier.brickbybrick.allinonecalculator;
 
-import edu.vanier.brickbybrick.allInOneCalculator.controllers.*;
-import edu.vanier.brickbybrick.allInOneCalculator.helpers.FxUIHelper;
+import edu.vanier.brickbybrick.allinonecalculator.controllers.*;
+import edu.vanier.brickbybrick.allinonecalculator.helpers.FxUIHelper;
 import java.io.IOException;
 import java.util.logging.Level;
 import javafx.application.Application;

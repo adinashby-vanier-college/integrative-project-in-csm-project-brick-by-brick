@@ -1,7 +1,7 @@
 package edu.vanier;
 
-import edu.vanier.brickbybrick.allInOneCalculator.tests.Driver;
-import edu.vanier.brickbybrick.allInOneCalculator.MainApp;
+import edu.vanier.brickbybrick.allinonecalculator.tests.Driver;
+import edu.vanier.brickbybrick.allinonecalculator.MainApp;
 
 /**
  * The Launcher class serves as the entry point to the application.

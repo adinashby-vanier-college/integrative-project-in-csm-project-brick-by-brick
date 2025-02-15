@@ -1,4 +1,4 @@
-package edu.vanier.brickbybrick.allInOneCalculator.helpers;
+package edu.vanier.brickbybrick.allinonecalculator.helpers;
 
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;

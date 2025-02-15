@@ -1,4 +1,4 @@
-package edu.vanier.brickbybrick.allInOneCalculator.controllers;
+package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import javafx.fxml.FXML;
 import org.slf4j.Logger;
