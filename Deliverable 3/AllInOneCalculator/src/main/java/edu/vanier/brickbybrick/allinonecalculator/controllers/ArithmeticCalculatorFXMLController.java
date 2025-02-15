@@ -1,5 +1,6 @@
 package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
+import edu.vanier.brickbybrick.allinonecalculator.logic.ArithmeticCalculatorLogic;
 import javafx.fxml.FXML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ArithmeticCalculatorFXMLController {
     private final static Logger logger = LoggerFactory.getLogger(ArithmeticCalculatorFXMLController.class);
+    private final static ArithmeticCalculatorLogic logic = new ArithmeticCalculatorLogic();
 
     @FXML
     private void initialize() {

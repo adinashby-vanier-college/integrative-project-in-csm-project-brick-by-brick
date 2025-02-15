@@ -26,12 +26,18 @@ public class MainApp extends Application {
     private static Scene scene;
     private static SceneController sceneController;
 
+    private static MainSceneFXMLController mainSceneController;
+    private static ArithmeticCalculatorFXMLController arithmeticCalculatorController;
+    private static GraphingCalculatorFXMLController graphingCalculatorController;
+    private static ProgrammingModeFXMLController programmingModeController;
+
     @Override
     public void start(Stage primaryStage) {
         try {
             logger.info("Bootstrapping the application...");
             // Load the scene of the primary stage.
-            Parent root = FxUIHelper.loadFXML(MAIN_SCENE, new MainSceneFXMLController());
+            mainSceneController = new MainSceneFXMLController();
+            Parent root = FxUIHelper.loadFXML(MAIN_SCENE, mainSceneController);
             scene = new Scene(root, 1200, 800);
             // Add the primary scene to the scene-switching controller.
             sceneController = new SceneController(scene);
@@ -73,24 +79,24 @@ public class MainApp extends Application {
                 }
                 case ARITHMETIC_CALCULATOR -> {
                     if (!sceneController.sceneExists(fxmlFileName)) {
-                        ArithmeticCalculatorFXMLController controller = new ArithmeticCalculatorFXMLController();
-                        Parent root = FxUIHelper.loadFXML(fxmlFileName, controller);
+                        arithmeticCalculatorController = new ArithmeticCalculatorFXMLController();
+                        Parent root = FxUIHelper.loadFXML(fxmlFileName, arithmeticCalculatorController);
                         sceneController.addScene(ARITHMETIC_CALCULATOR, root);
                     }
                     sceneController.activateScene(fxmlFileName);
                 }
                 case GRAPHING_CALCULATOR -> {
                     if (!sceneController.sceneExists(fxmlFileName)) {
-                        GraphingCalculatorFXMLController controller = new GraphingCalculatorFXMLController();
-                        Parent root = FxUIHelper.loadFXML(fxmlFileName, controller);
+                        graphingCalculatorController = new GraphingCalculatorFXMLController();
+                        Parent root = FxUIHelper.loadFXML(fxmlFileName, graphingCalculatorController);
                         sceneController.addScene(GRAPHING_CALCULATOR, root);
                     }
                     sceneController.activateScene(fxmlFileName);
                 }
                 case PROGRAMMING_MODE -> {
                     if (!sceneController.sceneExists(fxmlFileName)) {
-                        ProgrammingModeFXMLController controller = new ProgrammingModeFXMLController();
-                        Parent root = FxUIHelper.loadFXML(fxmlFileName, controller);
+                        programmingModeController = new ProgrammingModeFXMLController();
+                        Parent root = FxUIHelper.loadFXML(fxmlFileName, programmingModeController);
                         sceneController.addScene(PROGRAMMING_MODE, root);
                     }
                     sceneController.activateScene(fxmlFileName);
