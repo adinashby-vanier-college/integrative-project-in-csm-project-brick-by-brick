@@ -12,6 +12,8 @@ public class ArithmeticCalculatorFXMLController {
     private final static Logger logger = LoggerFactory.getLogger(ArithmeticCalculatorFXMLController.class);
     private final static ArithmeticCalculatorLogic logic = new ArithmeticCalculatorLogic();
 
+    private String currentExpression = "";
+
     @FXML
     private void initialize() {
         logger.info("Initializing ArithmeticCalculatorFXMLController...");

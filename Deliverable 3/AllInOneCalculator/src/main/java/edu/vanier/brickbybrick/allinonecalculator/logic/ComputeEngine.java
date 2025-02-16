@@ -11,4 +11,15 @@ package edu.vanier.brickbybrick.allinonecalculator.logic;
  * @author Qian Qian
  */
 public class ComputeEngine {
+    public String evaluate(String mathJson) {
+        return null;
+    }
+
+    public Object parse(String mathJson) {
+        return null;
+    }
+
+    public String serialize(Object mathJson) {
+        return null;
+    }
 }

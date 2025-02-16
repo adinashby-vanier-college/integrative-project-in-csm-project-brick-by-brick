@@ -5,4 +5,12 @@ package edu.vanier.brickbybrick.allinonecalculator.logic;
  */
 public class GraphingCalculatorLogic {
     private final ComputeEngine computeEngine = new ComputeEngine();
+
+    public String calculate(String expression) {
+        return null;
+    }
+
+    public double[] getGraphData(String expression) {
+        return null;
+    }
 }

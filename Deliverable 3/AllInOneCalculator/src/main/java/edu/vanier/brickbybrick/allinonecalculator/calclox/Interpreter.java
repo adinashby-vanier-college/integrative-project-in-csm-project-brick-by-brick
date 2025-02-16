@@ -6,8 +6,4 @@ package edu.vanier.brickbybrick.allinonecalculator.calclox;
  * @author Qian Qian
  */
 class Interpreter implements Expr.Visitor<Object> {
-    @Override
-    public Object visitBinaryExpr(Expr.Binary expr) {
-        return null;
-    }
 }
