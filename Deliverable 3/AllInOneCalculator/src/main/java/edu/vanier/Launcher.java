@@ -1,5 +1,6 @@
 package edu.vanier;
 
+import atlantafx.base.theme.CupertinoDark;
 import edu.vanier.brickbybrick.allinonecalculator.tests.Driver;
 import edu.vanier.brickbybrick.allinonecalculator.MainApp;
 
@@ -19,17 +20,7 @@ public class Launcher {
      * forwarded to {@link MainApp#main(String[])}.
      */
     public static void main(String[] args) {
-        //NOTE: This launcher class allows you to run 
-        //      multiple main methods simultaneously (depending on the context).         
-
-        //NOTE: Comment out the following line if you would like to execute 
-        //      another class' main method.  
+        // Launch the main application.
         MainApp.main(args);
-        //--
-        // Uncomment the following line to run the Driver's main method.
-        //Driver.main(args);        
-        //TODO: To run a main method of another class (other than the MainApp's)
-        //      main method, you can add a Java statement as follows:                 
-        // [ClassName].main(args);        
     }
 }
