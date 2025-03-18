@@ -2,6 +2,7 @@ package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import edu.vanier.brickbybrick.allinonecalculator.logic.ProgrammingModeLogic;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -41,17 +42,18 @@ public class ProgrammingModeFXMLController {
             logger.info("Add Button clicked.");
             variablesText.setText("Block Storage");
             variablesVBox.getChildren().clear();
+            variablesVBox.setPadding(new Insets(10, 10, 10, 10));
             Text text1 = new Text("If condition then,");
-            text1.setStyle("-fx-font-size: 20px;");
+            text1.setStyle("-fx-font-size: 15px;");
             variablesVBox.getChildren().add(text1);
             Text text2 = new Text("Else then,");
-            text2.setStyle("-fx-font-size: 20px;");
+            text2.setStyle("-fx-font-size: 15px;");
             variablesVBox.getChildren().add(text2);
             Text text3 = new Text("While condition do,");
-            text3.setStyle("-fx-font-size: 20px;");
+            text3.setStyle("-fx-font-size: 15px;");
             variablesVBox.getChildren().add(text3);
             Text text4 = new Text("When clicked do,");
-            text4.setStyle("-fx-font-size: 20px;");
+            text4.setStyle("-fx-font-size: 15px;");
             variablesVBox.getChildren().add(text4);
 
             variablesButton.setText("Click to leave");
