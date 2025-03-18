@@ -1,5 +1,6 @@
 package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
+import edu.vanier.brickbybrick.allinonecalculator.MainApp;
 import edu.vanier.brickbybrick.allinonecalculator.logic.ProgrammingModeLogic;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -35,8 +36,25 @@ public class ProgrammingModeFXMLController {
     private VBox variablesVBox;
 
     @FXML
+    private Button arithmeticModeSwitch;
+    @FXML
+    private Button graphingModeSwitch;
+    @FXML
+    private Button programmingModeSwitch;
+
+    @FXML
     private void initialize() {
         logger.info("Initializing CalculatorProgrammingFXMLController...");
+
+        arithmeticModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.ARITHMETIC_CALCULATOR);
+        });
+        graphingModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.GRAPHING_CALCULATOR);
+        });
+        programmingModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.PROGRAMMING_MODE);
+        });
 
         addButton.setOnAction(event -> {
             logger.info("Add Button clicked.");

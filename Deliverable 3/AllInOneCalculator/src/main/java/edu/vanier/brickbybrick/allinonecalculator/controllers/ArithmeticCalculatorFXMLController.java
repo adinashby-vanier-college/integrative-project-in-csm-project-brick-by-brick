@@ -1,8 +1,10 @@
 package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
+import edu.vanier.brickbybrick.allinonecalculator.MainApp;
 import edu.vanier.brickbybrick.allinonecalculator.logic.ArithmeticCalculatorLogic;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
@@ -24,6 +26,13 @@ public class ArithmeticCalculatorFXMLController {
     @FXML
     private WebView inputField;
     private WebEngine engine;
+
+    @FXML
+    private Button arithmeticModeSwitch;
+    @FXML
+    private Button graphingModeSwitch;
+    @FXML
+    private Button programmingModeSwitch;
 
     @FXML
     private void initialize() {
@@ -48,6 +57,16 @@ public class ArithmeticCalculatorFXMLController {
 
         // Setup the keyboard event listeners.
         setupKeyboard();
+
+        arithmeticModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.ARITHMETIC_CALCULATOR);
+        });
+        graphingModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.GRAPHING_CALCULATOR);
+        });
+        programmingModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.PROGRAMMING_MODE);
+        });
     }
 
     //> Keyboard Event Handlers
