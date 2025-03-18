@@ -53,21 +53,9 @@
         </MenuBar>
         <MenuBar layoutX="-172.0" layoutY="200.0" prefHeight="28.0" prefWidth="372.0" style="-fx-rotate: 90;">
             <menus>
-                <Menu mnemonicParsing="false" text="Arithmetic">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Programmable">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Graphic">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
+                <Menu mnemonicParsing="false" text="Arithmetic" />
+                <Menu mnemonicParsing="false" text="Programmable" />
+                <Menu mnemonicParsing="false" text="Graphic" />
             </menus>
         </MenuBar>
         <SplitPane dividerPositions="0.28783783783783784" layoutX="28.0" layoutY="28.0" orientation="VERTICAL" prefHeight="372.0" prefWidth="573.0">
