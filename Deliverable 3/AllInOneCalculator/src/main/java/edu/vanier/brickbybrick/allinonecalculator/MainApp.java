@@ -1,5 +1,6 @@
 package edu.vanier.brickbybrick.allinonecalculator;
 
+import atlantafx.base.theme.CupertinoDark;
 import edu.vanier.brickbybrick.allinonecalculator.controllers.*;
 import edu.vanier.brickbybrick.allinonecalculator.helpers.FxUIHelper;
 import java.io.IOException;
@@ -33,12 +34,15 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // Set the JavaFX Theme
+        MainApp.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
+        // Set the primary stage.
         try {
             logger.info("Bootstrapping the application...");
             // Load the scene of the primary stage.
             mainSceneController = new MainSceneFXMLController();
             Parent root = FxUIHelper.loadFXML(MAIN_SCENE, mainSceneController);
-            scene = new Scene(root, 1200, 800);
+            scene = new Scene(root, 600, 400);
             // Add the primary scene to the scene-switching controller.
             sceneController = new SceneController(scene);
             sceneController.addScene(MAIN_SCENE, root);
@@ -49,6 +53,7 @@ public class MainApp extends Application {
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
+            switchScene(ARITHMETIC_CALCULATOR);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
             java.util.logging.Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);

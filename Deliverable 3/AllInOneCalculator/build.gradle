@@ -6,7 +6,7 @@ plugins {
 }
 
 def logbackVersion = "1.4.11"
-def javafxVersion = "22.0.2"    
+def javafxVersion = "23.0.1"
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -17,7 +17,7 @@ repositories {
 //-- Loads the JavaFX modules of the selected JavaFX version.
 javafx {    
     version = "$javafxVersion"
-    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.media' ]
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.media', 'javafx.web' ]
 }
 
 dependencies {
@@ -33,6 +33,9 @@ dependencies {
     compileOnly  "org.openjfx:javafx-controls:$javafxVersion:javadoc"
     compileOnly  "org.openjfx:javafx-fxml:$javafxVersion:javadoc"
     compileOnly  "org.openjfx:javafx-graphics:$javafxVersion:javadoc"
+
+    // AtlantaFX - JavaFX CSS Theme Library
+    implementation 'io.github.mkpaz:atlantafx-base:2.0.0'
 
     // Link Logback to the project: @see: https://logback.qos.ch/ 
     implementation "ch.qos.logback:logback-classic:$logbackVersion"
