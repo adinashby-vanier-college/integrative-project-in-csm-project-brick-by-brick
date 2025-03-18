@@ -121,7 +121,7 @@
                                 </GridPane>
                                 <VBox prefHeight="260.0" prefWidth="186.0" style="-fx-border-color: #48484A; -fx-border-radius: 12;">
                                     <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Variables" textAlignment="CENTER" wrappingWidth="159.74566650390625">
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Variables" textAlignment="CENTER" wrappingWidth="159.74566650390625" fx:id="variablesText">
                                             <font>
                                                 <Font size="28.0" />
                                             </font>
@@ -129,7 +129,7 @@
                                                 <Insets top="10.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0">
+                                        <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0" fx:id="variablesVBox">
                                             <VBox.margin>
                                                 <Insets bottom="10.0" top="10.0" />
                                             </VBox.margin>
@@ -144,7 +144,7 @@
                                                 </Text>
                                             </children>
                                         </VBox>
-                                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Click to add ...">
+                                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Click to add ..." fx:id="variablesButton">
                                             <VBox.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" />
                                             </VBox.margin>
@@ -201,7 +201,7 @@
                                                         </Text>
                                                     </children>
                                                 </VBox>
-                                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Click to add ..." />
+                                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Click to add ..." fx:id="addButton"/>
                                             </children>
                                             <VBox.margin>
                                                 <Insets left="5.0" right="5.0" />

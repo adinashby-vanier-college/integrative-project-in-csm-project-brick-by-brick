@@ -53,7 +53,7 @@ public class MainApp extends Application {
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
-            switchScene(ARITHMETIC_CALCULATOR);
+            switchScene(PROGRAMMING_MODE);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
             java.util.logging.Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);

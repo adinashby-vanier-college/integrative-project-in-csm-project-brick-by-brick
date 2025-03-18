@@ -2,6 +2,9 @@ package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import edu.vanier.brickbybrick.allinonecalculator.logic.ProgrammingModeLogic;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +22,40 @@ public class ProgrammingModeFXMLController {
     private final List<String> addedInstructions = new ArrayList<>();
 
     @FXML
+    private Button addButton;
+
+    @FXML
+    private Button variablesButton;
+
+    @FXML
+    private Text variablesText;
+
+    @FXML
+    private VBox variablesVBox;
+
+    @FXML
     private void initialize() {
         logger.info("Initializing CalculatorProgrammingFXMLController...");
+
+        addButton.setOnAction(event -> {
+            logger.info("Add Button clicked.");
+            variablesText.setText("Block Storage");
+            variablesVBox.getChildren().clear();
+            Text text1 = new Text("If condition then,");
+            text1.setStyle("-fx-font-size: 20px;");
+            variablesVBox.getChildren().add(text1);
+            Text text2 = new Text("Else then,");
+            text2.setStyle("-fx-font-size: 20px;");
+            variablesVBox.getChildren().add(text2);
+            Text text3 = new Text("While condition do,");
+            text3.setStyle("-fx-font-size: 20px;");
+            variablesVBox.getChildren().add(text3);
+            Text text4 = new Text("When clicked do,");
+            text4.setStyle("-fx-font-size: 20px;");
+            variablesVBox.getChildren().add(text4);
+
+            variablesButton.setText("Click to leave");
+        });
     }
+
 }
