@@ -42,7 +42,7 @@ public class MainApp extends Application {
             // Load the scene of the primary stage.
             mainSceneController = new MainSceneFXMLController();
             Parent root = FxUIHelper.loadFXML(MAIN_SCENE, mainSceneController);
-            scene = new Scene(root, 1200, 800);
+            scene = new Scene(root, 600, 400);
             // Add the primary scene to the scene-switching controller.
             sceneController = new SceneController(scene);
             sceneController.addScene(MAIN_SCENE, root);

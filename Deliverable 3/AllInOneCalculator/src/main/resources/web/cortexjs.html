@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <script defer src="http://unpkg.com/mathlive"></script>
+</head>
+
+<body>
+<math-field id="mf" style="display: block">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</math-field>
+<script>
+    // mf.addEventListener('input', evt =>
+    //     console.log('Value:', evt.target.value)
+    // );
+    mf.addEventListener('input', function (evt) {
+        console.log('Value:', evt.target.value);
+    });
+</script>
+</body>
+
+</html>
