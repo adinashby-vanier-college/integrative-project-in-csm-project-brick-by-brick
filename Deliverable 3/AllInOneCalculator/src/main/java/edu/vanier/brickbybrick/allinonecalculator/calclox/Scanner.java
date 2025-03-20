@@ -2,6 +2,8 @@ package edu.vanier.brickbybrick.allinonecalculator.calclox;
 
 import edu.vanier.brickbybrick.allinonecalculator.calclox.token.Token;
 import edu.vanier.brickbybrick.allinonecalculator.calclox.token.TokenType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,8 @@ import static edu.vanier.brickbybrick.allinonecalculator.calclox.token.TokenType
  * @author Qian Qian
  */
 public class Scanner {
+    private final static Logger logger = LoggerFactory.getLogger(Scanner.class);
+
     //> Keyword Map
     /**
      * A map of keywords to their respective token types.
@@ -114,7 +118,7 @@ public class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    throw new RuntimeException("Unexpected character: " + c);
+                    logger.error("Unexpected character: '{}'.", c);
                 }
             }
             //<< Literals and Unknown
@@ -201,7 +205,8 @@ public class Scanner {
         }
 
         if (isAtEnd()) {
-            throw new RuntimeException("Unterminated string.");
+            logger.error("Unterminated string.");
+            return;
         }
 
         // The closing ".
