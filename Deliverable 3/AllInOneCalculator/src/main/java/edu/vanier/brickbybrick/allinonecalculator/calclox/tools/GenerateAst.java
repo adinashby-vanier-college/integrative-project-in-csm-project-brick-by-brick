@@ -114,7 +114,6 @@ public class GenerateAst {
         }
 
         try {
-
             String outputDirectory = args[0];
             defineAst(outputDirectory, "Expr", Arrays.asList(
                     "Assign   : Token name, Expr value",
@@ -133,7 +132,7 @@ public class GenerateAst {
                     "Expression : Expr expression",
                     "Function   : Token name, List<Token> params, List<Statement> body",
                     "If         : Expr condition, Statement thenBranch, Statement elseBranch",
-                    "Output      : Expr expression",
+                    "Output     : Expr expression",
                     "Return     : Token keyword, Expr value",
                     "Var        : Token name, Expr initializer",
                     "While      : Expr condition, Statement body"
