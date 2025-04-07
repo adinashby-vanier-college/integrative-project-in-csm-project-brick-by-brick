@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <MenuBar prefHeight="28.0" prefWidth="600.0">
             <menus>
@@ -97,15 +97,15 @@
                                         <Insets bottom="20.0" left="20.0" right="10.0" top="20.0" />
                                     </HBox.margin>
                                     <children>
-                                        <Button mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="x^" GridPane.halignment="CENTER" />
-                                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="25.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="rad" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                                        <Button alignment="CENTER_RIGHT" layoutX="81.0" layoutY="25.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" style="-fx-alignment: CENTER; -fx-background-color: #F0A202;" text="C" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                                        <Button layoutX="10.0" layoutY="25.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="sin" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                                        <Button layoutX="10.0" layoutY="80.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="cos" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                                        <Button layoutX="81.0" layoutY="80.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="tan" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                        <Button fx:id="squareButton" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="x^" GridPane.halignment="CENTER" />
+                                        <Button fx:id="radiantButton" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="25.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="rad" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                        <Button fx:id="clearButton" alignment="CENTER_RIGHT" layoutX="81.0" layoutY="25.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" style="-fx-alignment: CENTER; -fx-background-color: #F0A202;" text="C" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                        <Button fx:id="sinButton" layoutX="10.0" layoutY="25.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="sin" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                        <Button fx:id="cosButton" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="cos" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                        <Button fx:id="tanButton" layoutX="81.0" layoutY="80.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="tan" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                                         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                             <children>
-                                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="6.0" mnemonicParsing="false" translateX="3.0">
+                                                <Button fx:id="fracButton" alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="6.0" mnemonicParsing="false" translateX="3.0">
                                                     <graphic>
                                                         <VBox alignment="CENTER">
                                                             <children>
@@ -118,17 +118,18 @@
                                                 </Button>
                                             </children>
                                         </Pane>
-                                        <Button layoutX="10.0" layoutY="135.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="√" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                                        <Button fx:id="rootButton" layoutX="10.0" layoutY="135.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="√" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                                         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                             <children>
-                                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="6.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="√" />
+                                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="6.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="√" fx:id="xrootButton" />
                                                 <AnchorPane />
                                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="7.0" layoutX="25.0" layoutY="22.0" stroke="WHITE" strokeDashOffset="200.0" width="7.0" />
                                             </children>
                                         </Pane>
-                                        <Button layoutX="152.0" layoutY="135.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="lim" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                                        <Button layoutX="10.0" layoutY="190.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="d/dx" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                                        <Button layoutX="81.0" layoutY="190.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="∫" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                        <Button fx:id="limitButton" layoutX="152.0" layoutY="135.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="lim" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                        <Button fx:id="derButton" layoutX="10.0" layoutY="190.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="d/dx" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                        <Button fx:id="intButton" layoutX="81.0" layoutY="190.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="∫" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                        <Button fx:id="computeButton" layoutX="152.0" layoutY="190.0" mnemonicParsing="false" prefHeight="44.5" prefWidth="53.5" text="=" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                                     </children>
                                 </GridPane>
                                 <VBox prefHeight="260.0" prefWidth="186.0" style="-fx-border-color: #48484A; -fx-border-radius: 12;">

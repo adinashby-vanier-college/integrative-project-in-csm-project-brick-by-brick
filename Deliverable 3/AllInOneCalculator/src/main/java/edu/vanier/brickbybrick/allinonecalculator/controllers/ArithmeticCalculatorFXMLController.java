@@ -8,7 +8,7 @@ import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import javafx.scene.control.Button;
 import java.awt.event.KeyEvent;
 import java.net.URL;
 
@@ -23,6 +23,33 @@ public class ArithmeticCalculatorFXMLController {
 
     @FXML
     private WebView inputField;
+    @FXML
+    private Button squareButton;
+    @FXML
+    private Button radiantButton;
+    @FXML
+    private Button clearButton;
+    @FXML
+    private Button sinButton;
+    @FXML
+    private Button cosButton;
+    @FXML
+    private Button tanButton;
+    @FXML
+    private Button rootButton;
+    @FXML
+    private Button xrootButton;
+    @FXML
+    private Button fracButton;
+    @FXML
+    private Button limitButton;
+    @FXML
+    private Button derButton;
+    @FXML
+    private Button intButton;
+    @FXML
+    private Button computeButton;
+
     private WebEngine engine;
 
     @FXML
@@ -48,6 +75,114 @@ public class ArithmeticCalculatorFXMLController {
 
         // Setup the keyboard event listeners.
         setupKeyboard();
+
+        // Compute button implementation
+        computeButton.setOnAction(event -> {
+            if (engine != null) {
+                // Get the current expression from the WebView
+                String expression = (String) engine.executeScript("mf.getValue()");
+                if (expression != null && !expression.isEmpty()) {
+                    try {
+                        // Evaluate the expression using CortexJS
+                        String result = (String) engine.executeScript(
+                            "ce.parse('" + expression + "').evaluate().toString()"
+                        );
+                        // Insert the result into the input field
+                        engine.executeScript("mf.setValue('" + result + "')");
+                    } catch (Exception e) {
+                        logger.error("Error evaluating expression: " + e.getMessage());
+                    }
+                }
+            }
+        });
+
+        // Clear button implementation
+        clearButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand(\"deleteAll\");");
+            }
+        });
+
+        // Square button implementation
+        squareButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"^2\" ,\"insertAfter\"]);");
+            }
+        });
+
+        // Radiant button implementation
+        radiantButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\text{rad}\" ,\"insertAfter\"]);");
+            }
+        });
+
+        // Sin button implementation
+        sinButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\sin\" ,\"insertAfter\"]);");
+            }
+        });
+
+        // Cos button implementation
+        cosButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\cos\" ,\"insertAfter\"]);");
+            }
+        });
+
+        // Tan button implementation
+        tanButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\tan\" ,\"insertAfter\"]);");
+            }
+        });
+
+        // Square root button implementation
+        rootButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\sqrt{}\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
+            }
+        });
+
+        // Nth root button implementation
+        xrootButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\sqrt[n]{}\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
+            }
+        });
+
+        // Fraction button implementation
+        fracButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\frac{}{}\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
+            }
+        });
+
+        // Limit button implementation
+        limitButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\lim_{x \\to }\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
+            }
+        });
+
+        // Derivative button implementation
+        derButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\frac{d}{dx}\" ,\"insertAfter\"]);");
+            }
+        });
+
+        // Integral button implementation
+        intButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\int\" ,\"insertAfter\"]);");
+            }
+        });
     }
 
     //> Keyboard Event Handlers
@@ -77,8 +212,8 @@ public class ArithmeticCalculatorFXMLController {
         logger.info("Input Field Keyboard Event Handlers setup complete.");
     }
     //< Keyboard Event Handlers
-
     //> WebView Event Handlers
+
     /**
      * This method is called by the WebView when the expression is updated.
      * <p>
