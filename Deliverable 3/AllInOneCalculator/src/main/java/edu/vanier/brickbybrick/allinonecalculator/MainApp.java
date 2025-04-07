@@ -42,7 +42,7 @@ public class MainApp extends Application {
             // Load the scene of the primary stage.
             mainSceneController = new MainSceneFXMLController();
             Parent root = FxUIHelper.loadFXML(MAIN_SCENE, mainSceneController);
-            scene = new Scene(root, 600, 400);
+            scene = new Scene(root, 800, 500);
             // Add the primary scene to the scene-switching controller.
             sceneController = new SceneController(scene);
             sceneController.addScene(MAIN_SCENE, root);
@@ -53,7 +53,7 @@ public class MainApp extends Application {
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
-            switchScene(ARITHMETIC_CALCULATOR);
+            switchScene(PROGRAMMING_MODE);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
             java.util.logging.Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);

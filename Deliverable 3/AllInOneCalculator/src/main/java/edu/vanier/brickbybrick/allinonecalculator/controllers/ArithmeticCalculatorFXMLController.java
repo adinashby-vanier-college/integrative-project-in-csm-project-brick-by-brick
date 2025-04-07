@@ -1,14 +1,16 @@
 package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
+import edu.vanier.brickbybrick.allinonecalculator.MainApp;
 import edu.vanier.brickbybrick.allinonecalculator.logic.ArithmeticCalculatorLogic;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javafx.scene.control.Button;
+
 import java.awt.event.KeyEvent;
 import java.net.URL;
 
@@ -41,8 +43,8 @@ public class ArithmeticCalculatorFXMLController {
     private Button xrootButton;
     @FXML
     private Button fracButton;
-    @FXML
-    private Button limitButton;
+//    @FXML
+//    private Button limitButton;
     @FXML
     private Button derButton;
     @FXML
@@ -51,6 +53,13 @@ public class ArithmeticCalculatorFXMLController {
     private Button computeButton;
 
     private WebEngine engine;
+
+    @FXML
+    private Button arithmeticModeSwitch;
+    @FXML
+    private Button graphingModeSwitch;
+    @FXML
+    private Button programmingModeSwitch;
 
     @FXML
     private void initialize() {
@@ -75,6 +84,16 @@ public class ArithmeticCalculatorFXMLController {
 
         // Setup the keyboard event listeners.
         setupKeyboard();
+
+        arithmeticModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.ARITHMETIC_CALCULATOR);
+        });
+        graphingModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.GRAPHING_CALCULATOR);
+        });
+        programmingModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.PROGRAMMING_MODE);
+        });
 
         // Compute button implementation
         computeButton.setOnAction(event -> {
@@ -163,12 +182,12 @@ public class ArithmeticCalculatorFXMLController {
         });
 
         // Limit button implementation
-        limitButton.setOnAction(event -> {
-            if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\lim_{x \\to }\" ,\"insertAfter\"]);");
-                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
-            }
-        });
+//        limitButton.setOnAction(event -> {
+//            if (engine != null) {
+//                engine.executeScript("mf.executeCommand([\"insert\", \"\\lim_{x \\to }\" ,\"insertAfter\"]);");
+//                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
+//            }
+//        });
 
         // Derivative button implementation
         derButton.setOnAction(event -> {
@@ -212,8 +231,8 @@ public class ArithmeticCalculatorFXMLController {
         logger.info("Input Field Keyboard Event Handlers setup complete.");
     }
     //< Keyboard Event Handlers
-    //> WebView Event Handlers
 
+    //> WebView Event Handlers
     /**
      * This method is called by the WebView when the expression is updated.
      * <p>
