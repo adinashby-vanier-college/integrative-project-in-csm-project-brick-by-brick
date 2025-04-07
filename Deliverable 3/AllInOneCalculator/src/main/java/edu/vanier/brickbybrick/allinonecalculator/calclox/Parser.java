@@ -52,7 +52,13 @@ class Parser {
     }
 
     public List<Statement> parse() {
-        return null;
+        List<Statement> statements = new ArrayList<>();
+
+        while (!isAtEnd()) {
+            statements.add(declaration());
+        }
+
+        return statements;
     }
 
     private Expr expression() {
