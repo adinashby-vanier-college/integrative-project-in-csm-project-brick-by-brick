@@ -10,13 +10,10 @@ public abstract class Expr {
         R visitAssignExpr(Assign expr);
         R visitBinaryExpr(Binary expr);
         R visitCallExpr(Call expr);
-        R visitGetExpr(Get expr);
         R visitGroupingExpr(Grouping expr);
         R visitLiteralExpr(Literal expr);
         R visitLogicalExpr(Logical expr);
         R visitSetExpr(Set expr);
-        R visitSuperExpr(Super expr);
-        R visitThisExpr(This expr);
         R visitUnaryExpr(Unary expr);
         R visitVariableExpr(Variable expr);
     }
@@ -69,21 +66,6 @@ public abstract class Expr {
         @Override
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitCallExpr(this);
-        }
-    }
-    //> expr-get
-    public static class Get extends Expr {
-        public final Expr object;
-        public final Token name;
-
-        public Get(Expr object, Token name) {
-            this.object = object;
-            this.name = name;
-        }
-
-        @Override
-        public <R> R accept(Visitor<R> visitor) {
-            return visitor.visitGetExpr(this);
         }
     }
     //> expr-grouping
@@ -144,34 +126,6 @@ public abstract class Expr {
         @Override
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitSetExpr(this);
-        }
-    }
-    //> expr-super
-    public static class Super extends Expr {
-        public final Token keyword;
-        public final Token method;
-
-        public Super(Token keyword, Token method) {
-            this.keyword = keyword;
-            this.method = method;
-        }
-
-        @Override
-        public <R> R accept(Visitor<R> visitor) {
-            return visitor.visitSuperExpr(this);
-        }
-    }
-    //> expr-this
-    public static class This extends Expr {
-        public final Token keyword;
-
-        public This(Token keyword) {
-            this.keyword = keyword;
-        }
-
-        @Override
-        public <R> R accept(Visitor<R> visitor) {
-            return visitor.visitThisExpr(this);
         }
     }
     //> expr-unary

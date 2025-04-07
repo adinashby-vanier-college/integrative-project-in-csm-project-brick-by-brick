@@ -35,11 +35,9 @@ public abstract class Statement {
     //> statement-define
     public static class Define extends Statement {
         public final Token name;
-        public final Expr value;
 
-        public Define(Token name, Expr value) {
+        public Define(Token name) {
             this.name = name;
-            this.value = value;
         }
 
         @Override
