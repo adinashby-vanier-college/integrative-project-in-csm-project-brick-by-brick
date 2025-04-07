@@ -183,7 +183,24 @@ class AstPrint {
     public static void main(String[] args) {
         AstPrinter printer = new AstPrinter();
 
-        String code = "1 + 2 * 3;";
+        String code = """
+                define x;
+                
+                var a = 1;
+                while (a < 5) {
+                    a = a + 1;
+                }
+                for (var i = 0; i < 5; i = i + 1) { // For loop.
+                    a = a + 1;
+                }
+                
+                var result = "";
+                if (a <= 10 or a >= 100) {
+                    eval("[\\"Add\\", [\\"Power\\", \\"x\\", 2], [\\"Multiply\\", -5, \\"x\\"], \\"a\\"]");
+                }
+                
+                output result;
+                """;
 
         Scanner scanner = new Scanner(code);
         List<Token> tokens = scanner.scanTokens();
