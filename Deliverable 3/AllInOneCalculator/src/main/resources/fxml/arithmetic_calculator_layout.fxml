@@ -185,7 +185,7 @@
                                         <Insets bottom="20.0" left="5.0" right="5.0" top="20.0" />
                                     </HBox.margin>
                                 </VBox>
-                                <VBox layoutX="210.0" layoutY="10.0" style="-fx-border-color: #48484A; -fx-border-radius: 12;">
+                                <VBox layoutX="210.0" layoutY="10.0" style="-fx-border-color: #48484A; -fx-border-radius: 12;" HBox.hgrow="ALWAYS">
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="History" textAlignment="CENTER" wrappingWidth="159.74566650390625">
                                             <font>
@@ -195,7 +195,7 @@
                                                 <Insets top="10.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <VBox alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="253.0">
+                                        <VBox fx:id="historyVBox" alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="253.0">
                                             <children>
                                                 <VBox layoutX="10.0" layoutY="148.0" prefHeight="62.0">
                                                     <children>

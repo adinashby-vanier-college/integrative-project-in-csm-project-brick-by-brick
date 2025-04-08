@@ -5,12 +5,14 @@ import edu.vanier.brickbybrick.allinonecalculator.logic.ArithmeticCalculatorLogi
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -63,6 +65,9 @@ public class ArithmeticCalculatorFXMLController {
     private Button programmingModeSwitch;
 
     @FXML
+    private VBox historyVBox;
+
+    @FXML
     private void initialize() {
         logger.info("Initializing ArithmeticCalculatorFXMLController...");
 
@@ -89,6 +94,8 @@ public class ArithmeticCalculatorFXMLController {
         });
         logger.info("Input Field WebView setup complete.");
 
+        historyVBox.getChildren().clear();
+
         // Setup the keyboard event listeners.
         setupKeyboard();
 
@@ -104,7 +111,14 @@ public class ArithmeticCalculatorFXMLController {
 
         // Compute button implementation
         computeButton.setOnAction(event -> {
+            // Show the result in the input field.
             engine.executeScript("mf.setValue('" + currentResult + "')");
+            // Add the expression to the history.
+            try {
+                historyVBox.getChildren().add(logic.createHistoryItem(currentExpression, currentResult));
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
         });
 
         // Clear button implementation

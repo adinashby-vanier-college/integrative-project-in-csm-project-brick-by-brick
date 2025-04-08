@@ -40,6 +40,9 @@ dependencies {
     // Link Logback to the project: @see: https://logback.qos.ch/ 
     implementation "ch.qos.logback:logback-classic:$logbackVersion"
     implementation "ch.qos.logback:logback-core:$logbackVersion"
+
+    // JLaTeXMath - JavaFX LaTeX Math Renderer
+    implementation 'org.scilab.forge:jlatexmath:1.0.7'
     
     // Ikonli icon sets.
     // https://mvnrepository.com/artifact/org.kordamp.ikonli/ikonli-fontawesome5-pack
