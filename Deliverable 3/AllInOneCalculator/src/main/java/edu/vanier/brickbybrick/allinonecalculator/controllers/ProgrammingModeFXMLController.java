@@ -8,10 +8,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +40,8 @@ public class ProgrammingModeFXMLController {
     private VBox variablesVBox;
     @FXML
     private VBox secondVBox;
+    @FXML
+    private VBox instructionsVBox;
 
     @FXML
     private Button arithmeticModeSwitch;
@@ -86,6 +86,42 @@ public class ProgrammingModeFXMLController {
             Text text4 = new Text("When clicked do,");
             text4.setStyle("-fx-font-size: 20px;");
             vBox.getChildren().add(text4);
+
+            text1.setOnMouseClicked(event2 -> {
+                System.out.println("Clicked on If condition");
+                VBox vBox2 = new VBox();
+                vBox2.getChildren().add(new Text("If condition"));
+                vBox2.getChildren().add(new TextField("Enter condition"));
+                vBox2.setPadding(new Insets(5, 0, 5, 0));
+                instructionsVBox.getChildren().add(vBox2);
+            });
+
+            text2.setOnMouseClicked(event2 -> {
+                System.out.println("Clicked on else condition");
+                VBox vBox2 = new VBox();
+                vBox2.getChildren().add(new Text("Else condition"));
+                vBox2.getChildren().add(new TextField("Enter condition"));
+                vBox2.setPadding(new Insets(5, 0, 5, 0));
+                instructionsVBox.getChildren().add(vBox2);
+            });
+
+            text3.setOnMouseClicked(event2 -> {
+                System.out.println("Clicked on While condition");
+                VBox vBox2 = new VBox();
+                vBox2.getChildren().add(new Text("While condition"));
+                vBox2.getChildren().add(new TextField("Enter condition"));
+                vBox2.setPadding(new Insets(5, 0, 5, 0));
+                instructionsVBox.getChildren().add(vBox2);
+            });
+
+            text4.setOnMouseClicked(event2 -> {
+                System.out.println("clicked on When clicked");
+                VBox vBox2 = new VBox();
+                vBox2.getChildren().add(new Text("When clicked"));
+                vBox2.getChildren().add(new TextField("Enter event"));
+                vBox2.setPadding(new Insets(5, 0, 5, 0));
+                instructionsVBox.getChildren().add(vBox2);
+            });
 
             vBox.setAlignment(Pos.CENTER_LEFT);
             vBox.setPadding(new Insets(10));
