@@ -17,6 +17,7 @@
     // Add event listener for input changes
     mf.addEventListener('input', (evt) => {
         console.log('Value:', evt.target.value);
+        console.log('JSON: ', JSON.stringify(window.ce.parse(evt.target.value).json))
         try {
             const result = window.ce.parse(evt.target.value).evaluate().toString();
             console.log('Result:', result);

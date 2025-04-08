@@ -21,6 +21,7 @@ public class ArithmeticCalculatorFXMLController {
     private final static ArithmeticCalculatorLogic logic = new ArithmeticCalculatorLogic();
 
     private String currentExpression = "";
+    private String currentMathJSONStr = "";
     private String currentResult = "";
 
     @FXML
@@ -43,7 +44,7 @@ public class ArithmeticCalculatorFXMLController {
     private Button xrootButton;
     @FXML
     private Button fracButton;
-//    @FXML
+    //    @FXML
 //    private Button limitButton;
     @FXML
     private Button derButton;
@@ -77,8 +78,13 @@ public class ArithmeticCalculatorFXMLController {
             if (newValue == Worker.State.SUCCEEDED) {
                 JSObject window = (JSObject) engine.executeScript("window");
                 window.setMember("app", this);
-                engine.executeScript("mf.addEventListener('input', (evt) => { app.updateExpression(evt.target.value); });");
-                engine.executeScript("mf.addEventListener('input', (evt) => { app.updateResult(window.ce.parse(evt.target.value).evaluate().toString()); });");
+                engine.executeScript("""
+                        mf.addEventListener('input', (evt) => {
+                            app.updateExpression(evt.target.value);
+                            app.updateMathJSONStr(JSON.stringify(window.ce.parse(evt.target.value).json));
+                            app.updateResult(window.ce.parse(evt.target.value).evaluate());
+                        });
+                        """);
             }
         });
         logger.info("Input Field WebView setup complete.");
@@ -211,6 +217,7 @@ public class ArithmeticCalculatorFXMLController {
     //< Keyboard Event Handlers
 
     //> WebView Event Handlers
+
     /**
      * This method is called by the WebView when the expression is updated.
      * <p>
@@ -230,6 +237,17 @@ public class ArithmeticCalculatorFXMLController {
 
     /**
      * This method is called by the WebView when the expression is updated.
+     *
+     * @param mathJSONStr the new math JSON string
+     */
+    public void updateMathJSONStr(String mathJSONStr) {
+        logger.info("Math JSON String Updates: " + mathJSONStr);
+        currentMathJSONStr = mathJSONStr;
+    }
+
+    /**
+     * This method is called by the WebView when the expression is updated.
+     *
      * @param result the result of the expression
      */
     public void updateResult(String result) {
