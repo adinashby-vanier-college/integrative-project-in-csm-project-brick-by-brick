@@ -11,7 +11,6 @@ import netscape.javascript.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.event.KeyEvent;
 import java.net.URL;
 
 /**
@@ -132,35 +131,35 @@ public class ArithmeticCalculatorFXMLController {
         // Radiant button implementation
         radiantButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\text{rad}\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\text{rad}\" ,\"insertAfter\"]);");
             }
         });
 
         // Sin button implementation
         sinButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\sin\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\sin\" ,\"insertAfter\"]);");
             }
         });
 
         // Cos button implementation
         cosButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\cos\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\cos\" ,\"insertAfter\"]);");
             }
         });
 
         // Tan button implementation
         tanButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\tan\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\tan\" ,\"insertAfter\"]);");
             }
         });
 
         // Square root button implementation
         rootButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\sqrt{}\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\sqrt{}\" ,\"insertAfter\"]);");
                 engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
             }
         });
@@ -168,7 +167,7 @@ public class ArithmeticCalculatorFXMLController {
         // Nth root button implementation
         xrootButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\sqrt[n]{}\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\sqrt[n]{}\" ,\"insertAfter\"]);");
                 engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
             }
         });
@@ -176,30 +175,22 @@ public class ArithmeticCalculatorFXMLController {
         // Fraction button implementation
         fracButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\frac{}{}\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\frac{}{}\" ,\"insertAfter\"]);");
                 engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
             }
         });
 
-        // Limit button implementation
-//        limitButton.setOnAction(event -> {
-//            if (engine != null) {
-//                engine.executeScript("mf.executeCommand([\"insert\", \"\\lim_{x \\to }\" ,\"insertAfter\"]);");
-//                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
-//            }
-//        });
-
         // Derivative button implementation
         derButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\frac{d}{dx}\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\frac{d}{dx}\" ,\"insertAfter\"]);");
             }
         });
 
         // Integral button implementation
         intButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\int\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\int\" ,\"insertAfter\"]);");
             }
         });
     }
