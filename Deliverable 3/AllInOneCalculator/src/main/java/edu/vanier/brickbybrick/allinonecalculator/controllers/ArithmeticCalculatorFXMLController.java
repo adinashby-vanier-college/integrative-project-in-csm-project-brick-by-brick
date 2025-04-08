@@ -103,7 +103,7 @@ public class ArithmeticCalculatorFXMLController {
                     try {
                         // Evaluate the expression using CortexJS
                         String result = (String) engine.executeScript(
-                            "ce.parse('" + expression + "').evaluate().toString()"
+                            "window.ce.parse(\"" + expression + "\").evaluate().toString();"
                         );
                         // Insert the result into the input field
                         engine.executeScript("mf.setValue('" + result + "')");

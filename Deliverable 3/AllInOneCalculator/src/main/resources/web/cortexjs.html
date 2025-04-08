@@ -8,12 +8,21 @@
 
 <body>
 <math-field id="mf" style="display: block">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</math-field>
-<script>
-    // mf.addEventListener('input', evt =>
-    //     console.log('Value:', evt.target.value)
-    // );
-    mf.addEventListener('input', function (evt) {
+<script type="module">
+    import { ComputeEngine } from "https://unpkg.com/@cortex-js/compute-engine?module";
+
+    // Initialize ComputeEngine and make it globally available
+    window.ce = new ComputeEngine();
+
+    // Add event listener for input changes
+    mf.addEventListener('input', (evt) => {
         console.log('Value:', evt.target.value);
+        try {
+            const result = window.ce.parse(evt.target.value).evaluate().toString();
+            console.log('Result:', result);
+        } catch (error) {
+            console.error('Error evaluating expression:', error);
+        }
     });
 </script>
 </body>
