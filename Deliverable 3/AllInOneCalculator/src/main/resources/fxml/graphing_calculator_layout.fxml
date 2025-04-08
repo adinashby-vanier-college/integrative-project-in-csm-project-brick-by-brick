@@ -169,9 +169,9 @@
                   <Insets bottom="15.0" top="15.0" />
                </HBox.margin>
             </VBox>
-            <LineChart horizontalZeroLineVisible="false">
+            <LineChart fx:id="graphingChart" horizontalZeroLineVisible="false">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <NumberAxis side="BOTTOM" />
               </xAxis>
               <yAxis>
                 <NumberAxis side="LEFT" />

@@ -2,9 +2,9 @@ package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import edu.vanier.brickbybrick.allinonecalculator.MainApp;
 import edu.vanier.brickbybrick.allinonecalculator.logic.GraphingCalculatorLogic;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class GraphingCalculatorFXMLController {
     private final List<String> graphExpressions = new ArrayList<>();
 
     @FXML
-    private LineChart<Integer, Integer> graphingChart;
+    private LineChart<Number, Number> graphingChart;
 
     @FXML
     private Button arithmeticModeSwitch;
@@ -44,5 +44,22 @@ public class GraphingCalculatorFXMLController {
         programmingModeSwitch.setOnAction(event -> {
             MainApp.switchScene(MainApp.PROGRAMMING_MODE);
         });
+
+        NumberAxis xAxis = (NumberAxis) graphingChart.getXAxis();
+        NumberAxis yAxis = (NumberAxis) graphingChart.getYAxis();
+
+        xAxis.setLabel("X Axis");
+        yAxis.setLabel("Y Axis");
+
+        xAxis.setAutoRanging(true);
+        yAxis.setAutoRanging(true);
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Graph");
+        graphingChart.setLegendVisible(false);
+        graphingChart.getData().add(series);
+
+        series.getData().add(new XYChart.Data<>(-10, -10));
+        series.getData().add(new XYChart.Data<>(150, 150));
     }
 }
