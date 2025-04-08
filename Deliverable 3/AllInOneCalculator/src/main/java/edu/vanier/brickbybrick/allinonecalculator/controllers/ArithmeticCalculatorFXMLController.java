@@ -21,6 +21,7 @@ public class ArithmeticCalculatorFXMLController {
     private final static ArithmeticCalculatorLogic logic = new ArithmeticCalculatorLogic();
 
     private String currentExpression = "";
+    private String currentResult = "";
 
     @FXML
     private WebView inputField;
@@ -76,7 +77,8 @@ public class ArithmeticCalculatorFXMLController {
             if (newValue == Worker.State.SUCCEEDED) {
                 JSObject window = (JSObject) engine.executeScript("window");
                 window.setMember("app", this);
-                engine.executeScript("mf.addEventListener('input', function (evt) { app.updateExpression(evt.target.value); });");
+                engine.executeScript("mf.addEventListener('input', (evt) => { app.updateExpression(evt.target.value); });");
+                engine.executeScript("mf.addEventListener('input', (evt) => { app.updateResult(window.ce.parse(evt.target.value).evaluate().toString()); });");
             }
         });
         logger.info("Input Field WebView setup complete.");
@@ -96,22 +98,7 @@ public class ArithmeticCalculatorFXMLController {
 
         // Compute button implementation
         computeButton.setOnAction(event -> {
-            if (engine != null) {
-                // Get the current expression from the WebView
-                String expression = (String) engine.executeScript("mf.getValue()");
-                if (expression != null && !expression.isEmpty()) {
-                    try {
-                        // Evaluate the expression using CortexJS
-                        String result = (String) engine.executeScript(
-                            "window.ce.parse(\"" + expression + "\").evaluate().toString();"
-                        );
-                        // Insert the result into the input field
-                        engine.executeScript("mf.setValue('" + result + "')");
-                    } catch (Exception e) {
-                        logger.error("Error evaluating expression: " + e.getMessage());
-                    }
-                }
-            }
+            engine.executeScript("mf.setValue('" + currentResult + "')");
         });
 
         // Clear button implementation
@@ -138,21 +125,21 @@ public class ArithmeticCalculatorFXMLController {
         // Sin button implementation
         sinButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\sin\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\sin\\\\left(\\\\right)\" ,\"insertAfter\"]);");
             }
         });
 
         // Cos button implementation
         cosButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\cos\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\cos\\\\left(\\\\right)\" ,\"insertAfter\"]);");
             }
         });
 
         // Tan button implementation
         tanButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\tan\" ,\"insertAfter\"]);");
+                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\tan\\\\left(\\\\right)\" ,\"insertAfter\"]);");
             }
         });
 
@@ -239,6 +226,15 @@ public class ArithmeticCalculatorFXMLController {
     public void updateExpression(String expression) {
         logger.info("Expression Updates: " + expression);
         currentExpression = expression;
+    }
+
+    /**
+     * This method is called by the WebView when the expression is updated.
+     * @param result the result of the expression
+     */
+    public void updateResult(String result) {
+        logger.info("Result Updates: " + result);
+        currentResult = result;
     }
     //< WebView Event Handlers
 }
