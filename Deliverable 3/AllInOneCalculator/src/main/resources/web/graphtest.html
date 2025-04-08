@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graphing Calculator</title>
+    <script src="https://unpkg.com/@cortex-js/compute-engine"></script>
+    <script src="https://unpkg.com/mathlive"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        #functionInput {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="functionInput"></div>
+
+<script>
+    const ce = new ComputeEngine();
+    const mathField = new MathLive.MathField('functionInput', {
+        virtualKeyboardMode: 'manual',
+        virtualKeyboards: 'numeric symbols functions',
+        onContentDidChange: (mf) => {
+            const latex = mf.getValue();
+            const expr = ce.parse(latex);
+            window.javaConnector.updateFunction(JSON.stringify(expr.json));
+        }
+    });
+
+    // Initialize with a default function
+    mathField.setValue('y = x^2');
+</script>
+</body>
+</html>
