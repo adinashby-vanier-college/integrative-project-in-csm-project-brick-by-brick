@@ -2,9 +2,15 @@ package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import edu.vanier.brickbybrick.allinonecalculator.MainApp;
 import edu.vanier.brickbybrick.allinonecalculator.logic.ProgrammingModeLogic;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.slf4j.Logger;
@@ -34,6 +40,8 @@ public class ProgrammingModeFXMLController {
 
     @FXML
     private VBox variablesVBox;
+    @FXML
+    private VBox secondVBox;
 
     @FXML
     private Button arithmeticModeSwitch;
@@ -46,6 +54,9 @@ public class ProgrammingModeFXMLController {
     private void initialize() {
         logger.info("Initializing CalculatorProgrammingFXMLController...");
 
+        variablesVBox.setAlignment(Pos.TOP_CENTER);
+        variablesVBox.setSpacing(10);
+
         arithmeticModeSwitch.setOnAction(event -> {
             MainApp.switchScene(MainApp.ARITHMETIC_CALCULATOR);
         });
@@ -57,24 +68,42 @@ public class ProgrammingModeFXMLController {
         });
 
         addButton.setOnAction(event -> {
-            logger.info("Add Button clicked.");
+            variablesVBox.getChildren().remove(secondVBox);
+
             variablesText.setText("Block Storage");
-            variablesVBox.getChildren().clear();
-            variablesVBox.setPadding(new Insets(10, 10, 10, 10));
+
+            VBox vBox = new VBox();
+
             Text text1 = new Text("If condition then,");
-            text1.setStyle("-fx-font-size: 15px;");
-            variablesVBox.getChildren().add(text1);
+            text1.setStyle("-fx-font-size: 20px;");
+            vBox.getChildren().add(text1);
             Text text2 = new Text("Else then,");
-            text2.setStyle("-fx-font-size: 15px;");
-            variablesVBox.getChildren().add(text2);
+            text2.setStyle("-fx-font-size: 20px;");
+            vBox.getChildren().add(text2);
             Text text3 = new Text("While condition do,");
-            text3.setStyle("-fx-font-size: 15px;");
-            variablesVBox.getChildren().add(text3);
+            text3.setStyle("-fx-font-size: 20px;");
+            vBox.getChildren().add(text3);
             Text text4 = new Text("When clicked do,");
-            text4.setStyle("-fx-font-size: 15px;");
-            variablesVBox.getChildren().add(text4);
+            text4.setStyle("-fx-font-size: 20px;");
+            vBox.getChildren().add(text4);
+
+            vBox.setAlignment(Pos.CENTER_LEFT);
+            vBox.setPadding(new Insets(10));
+            variablesVBox.getChildren().add(vBox);
 
             variablesButton.setText("Click to leave");
+            variablesVBox.getChildren().remove(variablesButton);
+            variablesVBox.getChildren().add(variablesButton);
+            variablesButton.setAlignment(Pos.BOTTOM_CENTER);
+
+            variablesButton.setOnAction(event2 -> {
+                variablesText.setText("Variables");
+                variablesVBox.getChildren().remove(vBox);
+                variablesVBox.getChildren().add(secondVBox);
+                variablesVBox.getChildren().remove(variablesButton);
+                variablesVBox.getChildren().add(variablesButton);
+                variablesButton.setText("Click to add...");
+            });
         });
     }
 

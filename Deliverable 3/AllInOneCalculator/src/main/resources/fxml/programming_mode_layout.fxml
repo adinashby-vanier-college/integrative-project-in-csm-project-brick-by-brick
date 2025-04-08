@@ -22,6 +22,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
+<?import javafx.scene.layout.Region?>
 <BorderPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
         <MenuBar prefHeight="28.0" prefWidth="600.0" BorderPane.alignment="CENTER">
@@ -171,7 +172,7 @@
                               </Button>
                                     </children>
                                 </GridPane>
-                                <VBox alignment="BOTTOM_CENTER" style="-fx-border-color: #48484A; -fx-border-radius: 12;">
+                                <VBox fx:id="variablesVBox" alignment="BOTTOM_CENTER" style="-fx-border-color: #48484A; -fx-border-radius: 12;">
                                     <children>
                                         <Text fx:id="variablesText" strokeType="OUTSIDE" strokeWidth="0.0" text="Variables" textAlignment="CENTER" wrappingWidth="159.74566650390625">
                                             <font>
@@ -181,7 +182,8 @@
                                                 <Insets top="10.0" />
                                             </VBox.margin>
                                         </Text>
-                                        <VBox fx:id="variablesVBox" alignment="BOTTOM_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="100.0">
+                                        <Region fx:id="spacer" VBox.vgrow="ALWAYS" />
+                                        <VBox fx:id="secondVBox" alignment="BOTTOM_LEFT" prefWidth="100.0">
                                             <VBox.margin>
                                                 <Insets bottom="10.0" top="10.0" />
                                             </VBox.margin>
@@ -196,6 +198,7 @@
                                                 </Text>
                                             </children>
                                         </VBox>
+                                        <Region fx:id="spacer2" VBox.vgrow="ALWAYS" />
                                         <Button fx:id="variablesButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" text="Click to Add">
                                             <VBox.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" />
