@@ -18,7 +18,7 @@ import static edu.vanier.brickbybrick.allinonecalculator.calclox.token.TokenType
  *
  * @author Qian Qian
  */
-class Parser {
+public class Parser {
     private final static Logger logger = LoggerFactory.getLogger(Parser.class);
 
     /**
