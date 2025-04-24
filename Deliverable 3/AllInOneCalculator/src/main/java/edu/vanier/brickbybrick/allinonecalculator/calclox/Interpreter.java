@@ -280,7 +280,7 @@ public class Interpreter implements Expr.Visitor<Object>, Statement.Visitor<Void
     @Override
     public Void visitOutputStatement(Statement.Output statement) {
         Object value = evaluate(statement.expression);
-        logger.trace("OUTPUT STATEMENT\n\t{}", value);
+        logger.info("OUTPUT STATEMENT\n\t{}", value);
 
         // TODO: Implement output to calculator frontend.
 
