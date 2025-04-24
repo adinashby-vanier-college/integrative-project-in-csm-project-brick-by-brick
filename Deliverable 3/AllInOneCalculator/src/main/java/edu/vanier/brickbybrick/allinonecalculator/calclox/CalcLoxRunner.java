@@ -1,6 +1,8 @@
 package edu.vanier.brickbybrick.allinonecalculator.calclox;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.vanier.brickbybrick.allinonecalculator.calclox.ast.Statement;
 import edu.vanier.brickbybrick.allinonecalculator.calclox.exceptions.CalcLoxRunnerError;
@@ -28,7 +30,9 @@ public class CalcLoxRunner {
      * Execute the CalcLox interpreter on the given source code.
      * @param source the CalcLox source code to be executed
      */
-    public static void run(String source) {
+    public static void run(CalculatorFrontend frontend, String source) {
+        interpreter.attachCalculatorFrontend(frontend);
+
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
@@ -53,14 +57,31 @@ public class CalcLoxRunner {
     }
 }
 
+class CalculatorFrontendImpl extends CalculatorFrontend {
+    public CalculatorFrontendImpl() {
+        this.variables = new HashMap<>();
+        variables.put("a", 0.25);
+        variables.put("b", 0.5);
+    }
+
+    @Override
+    public void output(String result) {
+        System.out.println("Output: " + result);
+    }
+}
+
 class RunnerTest {
     public static void main(String[] args) {
+        CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
         // Example usage of the CalcLoxRunner
         String source = """
+                define a;
+                define b;
+                var c = a + b;
                 var x = 10;
                 var y = 20;
-                output x + y;
+                output c + x + y;
                 """;
-        CalcLoxRunner.run(source);
+        CalcLoxRunner.run(frontend, source);
     }
 }

@@ -23,6 +23,18 @@ public class Interpreter implements Expr.Visitor<Object>, Statement.Visitor<Void
     public final Environment globals = new Environment();
     private Environment environment = globals;
     private final Map<Expr, Integer> locals = new HashMap<>();
+    private Map<String, Double> frontendVariables = null;
+
+    /**
+     * The frontend of the calculator that calls the interpreter.
+     * The interpreter interacts with the frontend to get the input and output.
+     */
+    private CalculatorFrontend calculatorFrontend = null;
+
+    public void attachCalculatorFrontend(CalculatorFrontend calculatorFrontend) {
+        this.calculatorFrontend = calculatorFrontend;
+        this.frontendVariables = calculatorFrontend.variables;
+    }
 
     public Interpreter() {
         globals.define("clock", new LoxCallable() {
@@ -246,10 +258,13 @@ public class Interpreter implements Expr.Visitor<Object>, Statement.Visitor<Void
 
     @Override
     public Void visitDefineStatement(Statement.Define statement) {
-        Object value = null;
-
-        // TODO: Implement get value from calculator frontend.
-
+        if (calculatorFrontend == null) {
+            throw new RuntimeError(statement.name, "No calculator frontend is attached to the interpreter to get user-defined variables.");
+        }
+        if (frontendVariables == null || !frontendVariables.containsKey(statement.name.lexeme)) {
+            throw new RuntimeError(statement.name, "User-defined variable '" + statement.name.lexeme + "' not found in the calculator frontend.");
+        }
+        Double value = frontendVariables.get(statement.name.lexeme);
         environment.define(statement.name.lexeme, value);
         return null;
     }
@@ -281,9 +296,11 @@ public class Interpreter implements Expr.Visitor<Object>, Statement.Visitor<Void
     public Void visitOutputStatement(Statement.Output statement) {
         Object value = evaluate(statement.expression);
         logger.info("OUTPUT STATEMENT\n\t{}", value);
-
-        // TODO: Implement output to calculator frontend.
-
+        if (calculatorFrontend != null) {
+            calculatorFrontend.output(value.toString());
+        } else {
+            logger.warn("No calculator frontend is attached to the interpreter.");
+        }
         return null;
     }
 
