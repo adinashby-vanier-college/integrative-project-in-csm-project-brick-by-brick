@@ -75,7 +75,6 @@ public class ArithmeticCalculatorFXMLController {
         URL url = this.getClass().getResource("/web/cortexjs.html");
         assert url != null;
         engine = inputField.getEngine();
-        // Load the WebView with the CortexJS calculator HTML.
         engine.load(url.toExternalForm());
         inputField.setStyle("color-scheme: dark;");
         // Setup event listeners for the WebView.
@@ -87,7 +86,7 @@ public class ArithmeticCalculatorFXMLController {
                         mf.addEventListener('input', (evt) => {
                             app.updateExpression(evt.target.value);
                             app.updateMathJSONStr(JSON.stringify(window.ce.parse(evt.target.value).json));
-                            app.updateResult(window.ce.parse(evt.target.value).evaluate());
+                            app.updateResult(logic.calculate(JSON.stringify(window.ce.parse(evt.target.value).json)));
                         });
                         """);
             }
@@ -111,79 +110,123 @@ public class ArithmeticCalculatorFXMLController {
 
         // Compute button implementation
         computeButton.setOnAction(event -> {
-            // Show the result in the input field.
-            engine.executeScript("mf.setValue('" + currentResult + "')");
-            // Add the expression to the history.
             try {
-                historyVBox.getChildren().add(logic.createHistoryItem(currentExpression, currentResult));
-            } catch (IOException e) {
-                logger.error(e.getMessage());
+                logger.info("Compute button pressed");
+                
+                // Get the current expression
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                logger.info("Current expression: " + currentValue);
+                
+                // Get the MathJSON
+                String mathJson = (String) engine.executeScript("JSON.stringify(window.ce.parse(mf.getValue()).json)");
+                logger.info("MathJSON: " + mathJson);
+                
+                // Calculate the result using our logic
+                String result = logic.calculate(mathJson);
+                logger.info("Calculated result: " + result);
+                
+                // Update the display with the result
+                String script = "mf.setValue('" + result + "')";
+                logger.info("Executing script: " + script);
+                engine.executeScript(script);
+                
+                // Create and add history item
+                logger.info("Creating history item for expression: " + currentValue + ", result: " + result);
+                VBox historyItem = logic.createHistoryItem(currentValue, result);
+                historyVBox.getChildren().add(historyItem);
+                
+                // Update internal state
+                currentExpression = currentValue;
+                currentMathJSONStr = mathJson;
+                currentResult = result;
+                
+                logger.info("Compute operation completed successfully");
+            } catch (Exception e) {
+                logger.error("Error in compute operation: " + e.getMessage(), e);
+                String errorMessage = "Error: " + e.getMessage();
+                engine.executeScript("mf.setValue('" + errorMessage + "')");
             }
         });
 
         // Clear button implementation
         clearButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand(\"deleteAll\");");
+                engine.executeScript("mf.setValue('')");
+                currentExpression = "";
+                currentMathJSONStr = "";
+                currentResult = "";
             }
         });
 
         // Square button implementation
         squareButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"^2\" ,\"insertAfter\"]);");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "^2";
+                engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
 
         // Radiant button implementation
         radiantButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\text{rad}\" ,\"insertAfter\"]);");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + " rad";
+                engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
 
         // Sin button implementation
         sinButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\sin\\\\left(\\\\right)\" ,\"insertAfter\"]);");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "sin()";
+                engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
 
         // Cos button implementation
         cosButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\cos\\\\left(\\\\right)\" ,\"insertAfter\"]);");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "cos()";
+                engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
 
         // Tan button implementation
         tanButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\tan\\\\left(\\\\right)\" ,\"insertAfter\"]);");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "tan()";
+                engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
 
         // Square root button implementation
         rootButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\sqrt{}\" ,\"insertAfter\"]);");
-                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "sqrt()";
+                engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
 
         // Nth root button implementation
         xrootButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\sqrt[n]{}\" ,\"insertAfter\"]);");
-                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "nthroot(,)";
+                engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
 
         // Fraction button implementation
         fracButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\frac{}{}\" ,\"insertAfter\"]);");
-                engine.executeScript("mf.executeCommand(\"moveToPreviousChar\");");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "frac(,)";
+                engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
 
@@ -205,7 +248,18 @@ public class ArithmeticCalculatorFXMLController {
     //> Keyboard Event Handlers
     private void handleDelete(boolean forward) {
         if (engine != null) {
-            engine.executeScript("mf.executeCommand(\"delete" + (forward ? "Forward" : "Backward") + "\");");
+            String currentValue = (String) engine.executeScript("mf.getValue()");
+            if (forward) {
+                // Delete forward
+                if (!currentValue.isEmpty()) {
+                    engine.executeScript("mf.setValue('" + currentValue.substring(0, currentValue.length() - 1) + "')");
+                }
+            } else {
+                // Delete backward
+                if (!currentValue.isEmpty()) {
+                    engine.executeScript("mf.setValue('" + currentValue.substring(1) + "')");
+                }
+            }
         }
     }
 

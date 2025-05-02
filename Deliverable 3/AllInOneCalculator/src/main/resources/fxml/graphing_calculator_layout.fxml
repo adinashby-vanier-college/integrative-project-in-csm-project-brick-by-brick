@@ -171,7 +171,7 @@
             </VBox>
             <LineChart horizontalZeroLineVisible="false">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <NumberAxis side="BOTTOM" />
               </xAxis>
               <yAxis>
                 <NumberAxis side="LEFT" />

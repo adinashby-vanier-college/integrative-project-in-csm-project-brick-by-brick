@@ -6,7 +6,7 @@ plugins {
 }
 
 def logbackVersion = "1.4.11"
-def javafxVersion = "23.0.1"
+def javafxVersion = "17.0.8"
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -51,6 +51,8 @@ dependencies {
     implementation group: 'org.kordamp.ikonli', name: 'ikonli-javafx', version: '12.3.1'    
     implementation 'org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1'
 
+    // JSON library for MathJSON parsing
+    implementation 'org.json:json:20231013'
 
 }
 
