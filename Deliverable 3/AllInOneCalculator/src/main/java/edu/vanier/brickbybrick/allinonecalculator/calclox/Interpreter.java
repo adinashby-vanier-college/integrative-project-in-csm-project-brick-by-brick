@@ -56,6 +56,9 @@ public class Interpreter implements Expr.Visitor<Object>, Statement.Visitor<Void
     }
 
     public void interpret(List<Statement> statements) {
+        EvalCallableImpl evalCallable = new EvalCallableImpl(globals);
+        globals.define("eval", evalCallable);
+
         try {
             for (Statement statement : statements) {
                 execute(statement);

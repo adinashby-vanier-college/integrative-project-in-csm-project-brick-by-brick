@@ -185,4 +185,24 @@ public class CalcLoxTest {
 
         assert false;
     }
+
+    @Test
+    public void basicEvalTest() {
+        CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+
+        String source = """
+                var result = eval("[\\"Add\\", 1, 2]");
+                output result;
+                """;
+
+        try {
+            CalcLoxRunner.run(frontend, source);
+        } catch (SuccessResult e) {
+            assert e.result != null;
+            assert e.result.equals("3.0");
+            return;
+        }
+
+        assert false;
+    }
 }

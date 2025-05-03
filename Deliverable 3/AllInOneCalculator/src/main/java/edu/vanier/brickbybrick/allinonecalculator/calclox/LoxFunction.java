@@ -5,11 +5,11 @@ import edu.vanier.brickbybrick.allinonecalculator.calclox.ast.Statement;
 import java.util.List;
 
 public class LoxFunction implements LoxCallable {
-    private final Statement.Function declaration;
+    protected final Statement.Function declaration;
     /**
      * The variable scope of the function.
      */
-    private final Environment closure;
+    protected final Environment closure;
 
     public LoxFunction(Statement.Function declaration, Environment closure) {
         this.declaration = declaration;
