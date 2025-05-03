@@ -12,6 +12,10 @@ public class Environment {
     private final Environment enclosing;
     private final Map<String, Object> values = new HashMap<>();
 
+    public Map<String, Object> getValues() {
+        return values;
+    }
+
     public Environment() {
         this.enclosing = null;
     }

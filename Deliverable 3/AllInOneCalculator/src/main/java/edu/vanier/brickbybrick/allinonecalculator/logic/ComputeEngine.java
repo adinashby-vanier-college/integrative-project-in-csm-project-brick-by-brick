@@ -19,11 +19,19 @@ import org.slf4j.LoggerFactory;
  */
 public class ComputeEngine {
     private static final Logger logger = LoggerFactory.getLogger(ComputeEngine.class);
-    private static final Map<String, Double> CONSTANTS = new HashMap<>();
-    
-    public ComputeEngine() {
-        CONSTANTS.put("Pi", Math.PI);
-        CONSTANTS.put("E", Math.E);
+    private static final Map<String, Double> CONSTANTS = Map.of(
+            "Pi", Math.PI,
+            "E", Math.E
+    );
+    private final Map<String, Double> variables = new HashMap<>();
+
+    public Map<String, Double> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(Map<String, Double> variables) {
+        this.variables.clear();
+        this.variables.putAll(variables);
     }
 
     /**
@@ -222,6 +230,9 @@ public class ComputeEngine {
     private Object evaluateSymbol(String symbol) {
         if (CONSTANTS.containsKey(symbol)) {
             return CONSTANTS.get(symbol);
+        }
+        if (variables.containsKey(symbol)) {
+            return variables.get(symbol);
         }
         throw new JSONException("Unknown symbol: " + symbol);
     }

@@ -4,7 +4,9 @@ import edu.vanier.brickbybrick.allinonecalculator.calclox.ast.Statement;
 import edu.vanier.brickbybrick.allinonecalculator.calclox.token.Token;
 import edu.vanier.brickbybrick.allinonecalculator.logic.ComputeEngine;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static edu.vanier.brickbybrick.allinonecalculator.calclox.token.TokenType.IDENTIFIER;
 
@@ -33,7 +35,15 @@ public class EvalCallableImpl extends LoxFunction {
 
     @Override
     public Object call(Interpreter interpreter, List<Object> arguments) {
-        Environment environment = new Environment(super.closure);
+        Map<String, Double> variables = new HashMap<>();
+        super.closure.getValues().forEach(
+                (key, value) -> {
+                    if (value instanceof Double) {
+                        variables.put(key, (Double) value);
+                    }
+                }
+        );
+        computeEngine.setVariables(variables);
         String expression = (String) arguments.getFirst();
         expression = expression.replace("\\\"", "\"");
         return computeEngine.evaluate(expression);

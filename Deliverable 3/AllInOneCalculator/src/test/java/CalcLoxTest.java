@@ -15,8 +15,10 @@ class SuccessResult extends RuntimeException {
 class CalculatorFrontendImpl extends CalculatorFrontend {
     public CalculatorFrontendImpl() {
         this.variables = new HashMap<>();
-        variables.put("a", 0.25);
-        variables.put("b", 0.5);
+    }
+
+    public void addVariable(String variable, Double value) {
+        this.variables.put(variable, value);
     }
 
     @Override
@@ -192,6 +194,53 @@ public class CalcLoxTest {
 
         String source = """
                 var result = eval("[\\"Add\\", 1, 2]");
+                output result;
+                """;
+
+        try {
+            CalcLoxRunner.run(frontend, source);
+        } catch (SuccessResult e) {
+            assert e.result != null;
+            assert e.result.equals("3.0");
+            return;
+        }
+
+        assert false;
+    }
+
+    @Test
+    public void defineTest() {
+        CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+        frontend.addVariable("a", 1.0);
+        frontend.addVariable("b", 2.0);
+
+        String source = """
+                define a;
+                define b;
+                output a + b;
+                """;
+
+        try {
+            CalcLoxRunner.run(frontend, source);
+        } catch (SuccessResult e) {
+            assert e.result != null;
+            assert e.result.equals("3.0");
+            return;
+        }
+
+        assert false;
+    }
+
+    @Test
+    public void defineInEvalTest() {
+        CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+        frontend.addVariable("a", 1.0);
+        frontend.addVariable("b", 2.0);
+
+        String source = """
+                define a;
+                define b;
+                var result = eval("[\\"Add\\", \\"a\\", \\"b\\"]");
                 output result;
                 """;
 
