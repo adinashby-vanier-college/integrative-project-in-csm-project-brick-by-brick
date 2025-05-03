@@ -16,5 +16,5 @@ public abstract class CalculatorFrontend {
      * and the result is ready to be displayed.
      * @param result the result to be displayed
      */
-    abstract void output(String result);
+    public abstract void output(String result);
 }

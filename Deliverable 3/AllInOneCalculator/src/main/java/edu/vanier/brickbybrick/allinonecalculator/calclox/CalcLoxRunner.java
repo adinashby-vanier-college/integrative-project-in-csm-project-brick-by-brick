@@ -56,32 +56,3 @@ public class CalcLoxRunner {
         throw runnerError;
     }
 }
-
-class CalculatorFrontendImpl extends CalculatorFrontend {
-    public CalculatorFrontendImpl() {
-        this.variables = new HashMap<>();
-        variables.put("a", 0.25);
-        variables.put("b", 0.5);
-    }
-
-    @Override
-    public void output(String result) {
-        System.out.println("Output: " + result);
-    }
-}
-
-class RunnerTest {
-    public static void main(String[] args) {
-        CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
-        // Example usage of the CalcLoxRunner
-        String source = """
-                define a;
-                define b;
-                var c = a + b;
-                var x = 10;
-                var y = 20;
-                output c + x + y;
-                """;
-        CalcLoxRunner.run(frontend, source);
-    }
-}
