@@ -90,11 +90,6 @@ public class AstPrinter implements Expr.Visitor<String>, Statement.Visitor<Strin
     }
 
     @Override
-    public String visitSetExpr(Expr.Set expr) {
-        return String.format("(Expr) Set %s (%s) to %s", expr.value, expr.object, expr.name.lexeme);
-    }
-
-    @Override
     public String visitUnaryExpr(Expr.Unary expr) {
         return "(Expr) " + parenthesize(expr.operator.lexeme, expr.right);
     }
