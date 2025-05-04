@@ -77,21 +77,27 @@ public class ArithmeticCalculatorFXMLController {
         engine = inputField.getEngine();
         engine.load(url.toExternalForm());
         inputField.setStyle("color-scheme: dark;");
+        
         // Setup event listeners for the WebView.
         engine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
-                JSObject window = (JSObject) engine.executeScript("window");
-                window.setMember("app", this);
-                engine.executeScript("""
-                        mf.addEventListener('input', (evt) => {
-                            app.updateExpression(evt.target.value);
-                            app.updateMathJSONStr(JSON.stringify(window.ce.parse(evt.target.value).json));
-                            app.updateResult(logic.calculate(JSON.stringify(window.ce.parse(evt.target.value).json)));
-                        });
-                        """);
+                logger.info("WebView loaded successfully");
+                try {
+                    JSObject window = (JSObject) engine.executeScript("window");
+                    window.setMember("app", this);
+                    engine.executeScript("""
+                            mf.addEventListener('input', (evt) => {
+                                app.updateExpression(evt.target.value);
+                                app.updateMathJSONStr(JSON.stringify(window.ce.parse(evt.target.value).json));
+                                app.updateResult(logic.calculate(JSON.stringify(window.ce.parse(evt.target.value).json)));
+                            });
+                            """);
+                    logger.info("WebView event listeners setup complete");
+                } catch (Exception e) {
+                    logger.error("Error setting up WebView event listeners: " + e.getMessage(), e);
+                }
             }
         });
-        logger.info("Input Field WebView setup complete.");
 
         historyVBox.getChildren().clear();
 
@@ -216,8 +222,11 @@ public class ArithmeticCalculatorFXMLController {
         xrootButton.setOnAction(event -> {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
-                String newValue = currentValue + "nthroot(,)";
+                // Clear previous content and set a clear template with placeholders
+                String newValue = "\\sqrt[\\text{root}]{}\\text{number}";
                 engine.executeScript("mf.setValue('" + newValue + "')");
+                // After setting the nth root template, call the handler
+                handleNthRoot();
             }
         });
 
@@ -225,22 +234,35 @@ public class ArithmeticCalculatorFXMLController {
         fracButton.setOnAction(event -> {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
-                String newValue = currentValue + "frac(,)";
+                // Clear previous content and set a clear template with placeholders
+                String newValue = "\\frac{\\text{numerator}}{\\text{denominator}}";
                 engine.executeScript("mf.setValue('" + newValue + "')");
+                // After setting the fraction template, call the handler
+                handleFraction();
             }
         });
 
         // Derivative button implementation
         derButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\frac{d}{dx}\" ,\"insertAfter\"]);");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                // Clear previous content and set a clear template with placeholders
+                String newValue = "\\frac{d}{dx}{\\text{function}}";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+                // After setting the derivative template, call the handler
+                handleDerivative();
             }
         });
 
         // Integral button implementation
         intButton.setOnAction(event -> {
             if (engine != null) {
-                engine.executeScript("mf.executeCommand([\"insert\", \"\\\\int\" ,\"insertAfter\"]);");
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                // Clear previous content and set a clear template with placeholders
+                String newValue = "\\int_{\\text{lower bound}}^{\\text{upper bound}}{\\text{function}}";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+                // After setting the integral template, call the handler
+                handleIntegral();
             }
         });
     }
@@ -248,24 +270,32 @@ public class ArithmeticCalculatorFXMLController {
     //> Keyboard Event Handlers
     private void handleDelete(boolean forward) {
         if (engine != null) {
-            String currentValue = (String) engine.executeScript("mf.getValue()");
-            if (forward) {
-                // Delete forward
-                if (!currentValue.isEmpty()) {
-                    engine.executeScript("mf.setValue('" + currentValue.substring(0, currentValue.length() - 1) + "')");
-                }
-            } else {
-                // Delete backward
-                if (!currentValue.isEmpty()) {
-                    engine.executeScript("mf.setValue('" + currentValue.substring(1) + "')");
-                }
+            try {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                
+                if (currentValue.isEmpty()) return;
+                
+                // Always remove the last character, regardless of forward/backward
+                String newValue = currentValue.substring(0, currentValue.length() - 1);
+                engine.executeScript("mf.setValue('" + newValue + "')");
+                
+                // Move cursor to end after deletion
+                engine.executeScript("mf.setCaretPosition(" + newValue.length() + ")");
+            } catch (Exception e) {
+                logger.error("Error handling delete: " + e.getMessage());
             }
         }
     }
 
     private void handleMove(boolean next) {
         if (engine != null) {
-            engine.executeScript("mf.executeCommand(\"move" + (next ? "ToNextChar" : "ToPreviousChar") + "\");");
+            try {
+                // Move to end of expression
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                engine.executeScript("mf.setCaretPosition(" + currentValue.length() + ")");
+            } catch (Exception e) {
+                logger.error("Error handling move: " + e.getMessage());
+            }
         }
     }
 
@@ -274,10 +304,19 @@ public class ArithmeticCalculatorFXMLController {
         inputField.setOnKeyPressed(event -> {
             logger.info("Key pressed. Code: " + event.getCode());
             switch (event.getCode()) {
-                case BACK_SPACE -> handleDelete(false);
-                case DELETE -> handleDelete(true);
-                case LEFT -> handleMove(false);
-                case RIGHT -> handleMove(true);
+                case BACK_SPACE, DELETE -> handleDelete(true); // Both keys remove last character
+                case LEFT, RIGHT -> handleMove(true); // Both keys move to end
+                case HOME -> {
+                    if (engine != null) {
+                        engine.executeScript("mf.setCaretPosition(0)");
+                    }
+                }
+                case END -> {
+                    if (engine != null) {
+                        String currentValue = (String) engine.executeScript("mf.getValue()");
+                        engine.executeScript("mf.setCaretPosition(" + currentValue.length() + ")");
+                    }
+                }
             }
         });
         logger.info("Input Field Keyboard Event Handlers setup complete.");
@@ -323,4 +362,153 @@ public class ArithmeticCalculatorFXMLController {
         currentResult = result;
     }
     //< WebView Event Handlers
+
+    /**
+     * Handles the evaluation of integrals using Riemann sum approximation
+     */
+    private void handleIntegral() {
+        try {
+            String expression = (String) engine.executeScript("mf.getValue()");
+            // Parse the integral expression using regex to extract components
+            // Format: \int_{lower}^{upper}{function}
+            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\\\int_\\{(.*?)\\}\\^\\{(.*?)\\}\\{(.*?)\\}");
+            java.util.regex.Matcher matcher = pattern.matcher(expression);
+            
+            if (matcher.find()) {
+                String lowerBound = matcher.group(1).replace("\\text{lower bound}", "").trim();
+                String upperBound = matcher.group(2).replace("\\text{upper bound}", "").trim();
+                String function = matcher.group(3).replace("\\text{function}", "").trim();
+                
+                if (lowerBound.isEmpty() || upperBound.isEmpty() || function.isEmpty()) {
+                    engine.executeScript("mf.setValue('Please fill in all fields: lower bound, upper bound, and function')");
+                    return;
+                }
+                
+                String variable = "x"; // Default variable
+                
+                // Create MathJSON for integral
+                String mathJson = String.format(
+                    "[\"Integral\", \"%s\", \"%s\", %s, %s]",
+                    function, variable, lowerBound, upperBound
+                );
+                
+                String result = logic.calculate(mathJson);
+                engine.executeScript("mf.setValue('" + result + "')");
+            }
+        } catch (Exception e) {
+            logger.error("Error evaluating integral: " + e.getMessage());
+            engine.executeScript("mf.setValue('Error: " + e.getMessage() + "')");
+        }
+    }
+
+    /**
+     * Handles the evaluation of derivatives using central difference approximation
+     */
+    private void handleDerivative() {
+        try {
+            String expression = (String) engine.executeScript("mf.getValue()");
+            // Parse the derivative expression using regex to extract components
+            // Format: \frac{d}{dx}{function}
+            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\\\frac\\{d\\}\\{dx\\}\\{(.*?)\\}");
+            java.util.regex.Matcher matcher = pattern.matcher(expression);
+            
+            if (matcher.find()) {
+                String function = matcher.group(1).replace("\\text{function}", "").trim();
+                
+                if (function.isEmpty()) {
+                    engine.executeScript("mf.setValue('Please enter a function to differentiate')");
+                    return;
+                }
+                
+                String variable = "x"; // Default variable
+                double point = 0.0; // Default evaluation point
+                double h = 0.0001; // Small step size for numerical differentiation
+                
+                // Create MathJSON for derivative
+                String mathJson = String.format(
+                    "[\"Derivative\", \"%s\", \"%s\", %f, %f]",
+                    function, variable, point, h
+                );
+                
+                String result = logic.calculate(mathJson);
+                engine.executeScript("mf.setValue('" + result + "')");
+            }
+        } catch (Exception e) {
+            logger.error("Error evaluating derivative: " + e.getMessage());
+            engine.executeScript("mf.setValue('Error: " + e.getMessage() + "')");
+        }
+    }
+
+    /**
+     * Handles the evaluation of fractions
+     */
+    private void handleFraction() {
+        try {
+            String expression = (String) engine.executeScript("mf.getValue()");
+            // Parse the fraction expression using regex to extract components
+            // Format: \frac{numerator}{denominator}
+            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\\\frac\\{(.*?)\\}\\{(.*?)\\}");
+            java.util.regex.Matcher matcher = pattern.matcher(expression);
+            
+            if (matcher.find()) {
+                String numerator = matcher.group(1).replace("\\text{numerator}", "").trim();
+                String denominator = matcher.group(2).replace("\\text{denominator}", "").trim();
+                
+                if (numerator.isEmpty() || denominator.isEmpty()) {
+                    engine.executeScript("mf.setValue('Please fill in both numerator and denominator')");
+                    return;
+                }
+                
+                // Create MathJSON for fraction
+                String mathJson = String.format(
+                    "[\"Fraction\", %s, %s]",
+                    numerator, denominator
+                );
+                
+                String result = logic.calculate(mathJson);
+                
+                // Display the result as a fraction with a horizontal bar
+                String displayResult = String.format("\\frac{%s}{%s}", numerator, denominator);
+                engine.executeScript("mf.setValue('" + displayResult + "')");
+            }
+        } catch (Exception e) {
+            logger.error("Error evaluating fraction: " + e.getMessage());
+            engine.executeScript("mf.setValue('Error: " + e.getMessage() + "')");
+        }
+    }
+
+    /**
+     * Handles the evaluation of nth root
+     */
+    private void handleNthRoot() {
+        try {
+            String expression = (String) engine.executeScript("mf.getValue()");
+            // Parse the nth root expression using regex to extract components
+            // Format: \sqrt[root]{number}
+            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\\\sqrt\\[(.*?)\\]\\{(.*?)\\}");
+            java.util.regex.Matcher matcher = pattern.matcher(expression);
+            
+            if (matcher.find()) {
+                String root = matcher.group(1).replace("\\text{root}", "").trim();
+                String number = matcher.group(2).replace("\\text{number}", "").trim();
+                
+                if (root.isEmpty() || number.isEmpty()) {
+                    engine.executeScript("mf.setValue('Please fill in both the root and the number')");
+                    return;
+                }
+                
+                // Create MathJSON for nth root
+                String mathJson = String.format(
+                    "[\"NthRoot\", %s, %s]",
+                    number, root
+                );
+                
+                String result = logic.calculate(mathJson);
+                engine.executeScript("mf.setValue('" + result + "')");
+            }
+        } catch (Exception e) {
+            logger.error("Error evaluating nth root: " + e.getMessage());
+            engine.executeScript("mf.setValue('Error: " + e.getMessage() + "')");
+        }
+    }
 }
