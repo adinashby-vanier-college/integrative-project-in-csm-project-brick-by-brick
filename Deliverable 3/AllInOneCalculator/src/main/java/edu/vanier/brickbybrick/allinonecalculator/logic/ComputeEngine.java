@@ -170,6 +170,9 @@ public class ComputeEngine {
                 return fraction(args);
             case "NthRoot":
                 return nthRoot(args);
+            case "Negate":
+                if (args.length != 1) throw new JSONException("Negate requires exactly 1 argument");
+                return -toDouble(args[0]);
             default:
                 throw new JSONException("Unknown operator: " + operator);
         }
