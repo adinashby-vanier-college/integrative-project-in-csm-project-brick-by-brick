@@ -44,6 +44,17 @@ public class ComputeEngine {
             logger.info("Evaluating MathJSON: " + mathJson);
             Object parsed = parse(mathJson);
             Object result = evaluateExpression(parsed);
+            
+            // Handle fraction objects in the result
+            if (result instanceof JSONObject) {
+                JSONObject obj = (JSONObject) result;
+                if (obj.has("type") && obj.getString("type").equals("fraction")) {
+                    return String.format("\\frac{%s}{%s}", 
+                        obj.get("numerator").toString(),
+                        obj.get("denominator").toString());
+                }
+            }
+            
             logger.info("Evaluation result: " + result);
             return result.toString();
         } catch (JSONException e) {
@@ -151,6 +162,14 @@ public class ComputeEngine {
                 return tan(args);
             case "Sqrt":
                 return sqrt(args);
+            case "Integral":
+                return integral(args);
+            case "Derivative":
+                return derivative(args);
+            case "Fraction":
+                return fraction(args);
+            case "NthRoot":
+                return nthRoot(args);
             default:
                 throw new JSONException("Unknown operator: " + operator);
         }
@@ -215,6 +234,99 @@ public class ComputeEngine {
         return Math.sqrt(value);
     }
 
+    // Calculus operations
+    private double integral(Object[] args) {
+        if (args.length != 4) throw new JSONException("Integral requires 4 arguments: function, variable, lower bound, upper bound");
+        String function = args[0].toString();
+        double a = toDouble(args[2]); // lower bound
+        double b = toDouble(args[3]); // upper bound
+        
+        // Number of subintervals (n) - using a large number for better approximation
+        int n = 1000;
+        double deltaX = (b - a) / n;
+        double sum = 0;
+        
+        // Riemann sum using right endpoints
+        for (int i = 1; i <= n; i++) {
+            double x = a + i * deltaX;
+            // For polynomial functions like x^2, directly calculate f(x)
+            if (function.contains("x^2")) {
+                sum += (x * x) * deltaX;
+            }
+            // For sin(x)
+            else if (function.contains("sin(x)")) {
+                sum += Math.sin(x) * deltaX;
+            }
+            // For e^x
+            else if (function.contains("e^x")) {
+                sum += Math.exp(x) * deltaX;
+            }
+            // For 1/x
+            else if (function.contains("1/x")) {
+                sum += (1.0 / x) * deltaX;
+            }
+            // For linear functions
+            else if (function.equals("x")) {
+                sum += x * deltaX;
+            }
+            else {
+                throw new JSONException("Unsupported function for integration: " + function);
+            }
+        }
+        
+        return sum;
+    }
+
+    private double derivative(Object[] args) {
+        if (args.length != 4) throw new JSONException("Derivative requires 4 arguments: function, variable, point, stepSize(h)");
+        Object function = args[0];
+        String variable = args[1].toString();
+        double point = toDouble(args[2]);
+        double h = toDouble(args[3]);
+        
+        // Central difference approximation
+        variables.put(variable, point + h);
+        Object resultPlus = evaluateExpression(function);
+        double f_plus = toDouble(resultPlus);
+        
+        variables.put(variable, point - h);
+        Object resultMinus = evaluateExpression(function);
+        double f_minus = toDouble(resultMinus);
+        
+        variables.remove(variable);
+        return (f_plus - f_minus) / (2 * h);
+    }
+
+    // Fraction operations
+    private Object fraction(Object[] args) {
+        if (args.length != 2) throw new JSONException("Fraction requires 2 arguments: numerator and denominator");
+        double numerator = toDouble(args[0]);
+        double denominator = toDouble(args[1]);
+        if (denominator == 0) throw new ArithmeticException("Division by zero");
+        
+        // Return a JSON object representing the fraction
+        JSONObject fraction = new JSONObject();
+        fraction.put("type", "fraction");
+        fraction.put("numerator", numerator);
+        fraction.put("denominator", denominator);
+        return fraction;
+    }
+
+    // Nth root function
+    private double nthRoot(Object[] args) {
+        if (args.length != 2) throw new JSONException("NthRoot requires 2 arguments: number and root");
+        double number = toDouble(args[0]);
+        double root = toDouble(args[1]);
+        if (root == 0) throw new ArithmeticException("Root cannot be zero");
+        if (number < 0 && root % 2 == 0) throw new ArithmeticException("Cannot take even root of negative number");
+        
+        // Handle negative numbers with odd roots
+        if (number < 0) {
+            return -Math.pow(-number, 1.0 / root);
+        }
+        return Math.pow(number, 1.0 / root);
+    }
+
     // Helper methods
     private Object evaluateObject(JSONObject obj) {
         if (obj.has("num")) {
@@ -234,7 +346,9 @@ public class ComputeEngine {
         if (variables.containsKey(symbol)) {
             return variables.get(symbol);
         }
-        throw new JSONException("Unknown symbol: " + symbol);
+        // If it's not a constant or variable, return the symbol itself
+        // This allows us to handle expressions like "x" in integrals and derivatives
+        return symbol;
     }
 
     private double toDouble(Object value) {
