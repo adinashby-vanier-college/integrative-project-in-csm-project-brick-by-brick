@@ -213,7 +213,7 @@ public class ArithmeticCalculatorFXMLController {
         rootButton.setOnAction(event -> {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
-                String newValue = currentValue + "sqrt()";
+                String newValue = currentValue + "\\\\sqrt{x}";
                 engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
