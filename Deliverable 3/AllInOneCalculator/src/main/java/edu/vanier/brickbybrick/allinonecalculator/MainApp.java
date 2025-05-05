@@ -15,13 +15,9 @@ import org.slf4j.LoggerFactory;
 public class MainApp extends Application {
     private final static Logger logger = LoggerFactory.getLogger(MainApp.class);
 
-    // The FXML file name of the main (welcome) scene of the application.
     public static final String MAIN_SCENE = "main_scene_layout";
-    // The FXML file name of the arithmetic calculator.
     public static final String ARITHMETIC_CALCULATOR = "arithmetic_calculator_layout";
-    // The FXML file name of the graphing calculator.
     public static final String GRAPHING_CALCULATOR = "graphing_calculator_layout";
-    // The FXML file name of the calculator's programming mode.
     public static final String PROGRAMMING_MODE = "programming_mode_layout";
 
     private static Scene scene;
@@ -34,22 +30,23 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Set the JavaFX Theme
         MainApp.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
-        // Set the primary stage.
         try {
             logger.info("Bootstrapping the application...");
-            // Load the scene of the primary stage.
             mainSceneController = new MainSceneFXMLController();
             Parent root = FxUIHelper.loadFXML(MAIN_SCENE, mainSceneController);
             scene = new Scene(root, 800, 500);
-            // Add the primary scene to the scene-switching controller.
             sceneController = new SceneController(scene);
             sceneController.addScene(MAIN_SCENE, root);
             primaryStage.setScene(scene);
             primaryStage.sizeToScene();
             primaryStage.setTitle("All In One Calculator, made by Brick by Brick");
-            // Always show the application on top of other windows upon startup.
+
+            primaryStage.setMinHeight(450);
+            primaryStage.setMinWidth(800);
+
+            primaryStage.setResizable(true);
+
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
