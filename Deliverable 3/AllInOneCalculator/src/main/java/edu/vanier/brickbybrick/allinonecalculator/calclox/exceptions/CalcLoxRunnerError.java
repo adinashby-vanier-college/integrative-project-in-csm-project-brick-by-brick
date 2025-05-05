@@ -9,8 +9,14 @@ package edu.vanier.brickbybrick.allinonecalculator.calclox.exceptions;
  * @author Qian Qian
  */
 public class CalcLoxRunnerError extends RuntimeException {
-    public CalcLoxRunnerError() {
-        // TODO: Implement this constructor to instantiate the exception with meaningful error message.
-        super("This is a CalcLoxRunner error.");
+    private final int line;
+
+    public CalcLoxRunnerError(String message, int line) {
+        super(message);
+        this.line = line;
+    }
+
+    public int getLine() {
+        return line;
     }
 }

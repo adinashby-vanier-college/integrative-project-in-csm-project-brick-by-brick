@@ -20,44 +20,70 @@ import java.io.IOException;
  */
 public class ArithmeticCalculatorLogic {
     private static long historyID = 1L;
-
     private final ComputeEngine computeEngine = new ComputeEngine();
 
+    /**
+     * Calculates the result of a mathematical expression.
+     * @param expression The expression to calculate
+     * @return The result of the calculation
+     */
     public String calculate(String expression) {
-        return null;
+        try {
+            return computeEngine.evaluate(expression);
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
     }
 
+    /**
+     * Creates a history item for the expression and its result.
+     * @param expression The expression that was calculated
+     * @param result The result of the calculation
+     * @return A VBox containing the history item
+     * @throws IOException If there is an error creating the history item
+     */
     public VBox createHistoryItem(String expression, String result) throws IOException {
         VBox historyItem = new VBox();
+        historyItem.setStyle("-fx-padding: 5px; -fx-spacing: 5px;");
 
+        // Create expression display
         TeXFormula formula = new TeXFormula(expression);
-        TeXIcon icon = formula.new TeXIconBuilder().setStyle(TeXConstants.STYLE_DISPLAY).setSize(30).build();
+        TeXIcon icon = formula.new TeXIconBuilder()
+                .setStyle(TeXConstants.STYLE_DISPLAY)
+                .setSize(20)
+                .build();
         icon.setInsets(new Insets(5, 5, 5, 5));
 
+        // Create image from LaTeX
         BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setColor(Color.white);
-        g2.fillRect(0,0,icon.getIconWidth(),icon.getIconHeight());
+        g2.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
         JLabel jl = new JLabel();
         jl.setForeground(new Color(0, 0, 0));
         icon.paintIcon(jl, g2, 0, 0);
 
-        if (!new File("history_img").exists()) {
-            new File("history_img").mkdirs();
-        } else {
-            new File("history_img").delete();
-            new File("history_img").mkdirs();
+        // Ensure history_img directory exists
+        File historyDir = new File("history_img");
+        if (!historyDir.exists()) {
+            historyDir.mkdirs();
         }
 
+        // Save the image
         File file = new File("history_img/history_" + historyID++ + ".png");
-        ImageIO.write(image, "png", file.getAbsoluteFile());
+        ImageIO.write(image, "png", file);
 
+        // Create JavaFX components
         ImageView img = new ImageView(new Image(file.toURI().toString()));
         img.setFitHeight(32);
-        Text resultText = new Text(result);
-        resultText.setStyle("-fx-font-size: 12px; -fx-text-fill: #888; -fx-text-alignment: right;");
+        img.setPreserveRatio(true);
 
+        Text resultText = new Text("= " + result);
+        resultText.setStyle("-fx-font-size: 14px; -fx-fill: #888;");
+
+        // Add components to VBox
         historyItem.getChildren().addAll(img, resultText);
+        historyItem.setStyle("-fx-background-color: #f5f5f5; -fx-padding: 5px; -fx-spacing: 5px;");
 
         return historyItem;
     }

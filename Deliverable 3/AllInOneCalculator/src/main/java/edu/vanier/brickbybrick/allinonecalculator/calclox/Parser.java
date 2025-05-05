@@ -18,7 +18,7 @@ import static edu.vanier.brickbybrick.allinonecalculator.calclox.token.TokenType
  *
  * @author Qian Qian
  */
-class Parser {
+public class Parser {
     private final static Logger logger = LoggerFactory.getLogger(Parser.class);
 
     /**
@@ -284,6 +284,7 @@ class Parser {
     //> Function Parsing
     private Statement.Function function(String kind) {
         Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
+        logger.info("IDENTIFIER Token: {}", name);
 
         consume(LEFT_PAREN, "Expect '(' after " + kind + " name.");
         List<Token> parameters = new ArrayList<>();
@@ -296,6 +297,7 @@ class Parser {
             } while (match(COMMA));
         }
         consume(RIGHT_PAREN, "Expect ')' after parameters.");
+        logger.info("PARAMETERS Token: {}", parameters);
 
         consume(LEFT_BRACE, "Expect '{' before " + kind + " body.");
         List<Statement> body = block();
