@@ -68,11 +68,13 @@ public class ProgrammingModeFXMLController {
         });
 
         addButton.setOnAction(event -> {
-            variablesVBox.getChildren().remove(secondVBox);
+            variablesVBox.getChildren().clear();
+            variablesVBox.getChildren().add(variablesText);
 
             variablesText.setText("Block Storage");
 
             VBox vBox = new VBox();
+            vBox.setAlignment(Pos.CENTER); 
 
             Text text1 = new Text("If condition then,");
             text1.setStyle("-fx-font-size: 20px;");
@@ -123,22 +125,48 @@ public class ProgrammingModeFXMLController {
                 instructionsVBox.getChildren().add(vBox2);
             });
 
-            vBox.setAlignment(Pos.CENTER_LEFT);
+            vBox.setAlignment(Pos.CENTER); 
             vBox.setPadding(new Insets(10));
+
+            Region spacerTop = new Region();
+            spacerTop.setMinHeight(10);
+            VBox.setVgrow(spacerTop, Priority.ALWAYS);
+            variablesVBox.getChildren().add(spacerTop);
+
             variablesVBox.getChildren().add(vBox);
 
+            Region spacerBottom = new Region();
+            spacerBottom.setMinHeight(10);
+            VBox.setVgrow(spacerBottom, Priority.ALWAYS);
+            variablesVBox.getChildren().add(spacerBottom);
+
             variablesButton.setText("Click to leave");
-            variablesVBox.getChildren().remove(variablesButton);
+            Region spacerBeforeButton = new Region();
+            spacerBeforeButton.setMinHeight(10);
+            VBox.setVgrow(spacerBeforeButton, Priority.ALWAYS);
+            variablesVBox.getChildren().add(spacerBeforeButton);
             variablesVBox.getChildren().add(variablesButton);
-            variablesButton.setAlignment(Pos.BOTTOM_CENTER);
 
             variablesButton.setOnAction(event2 -> {
+                variablesVBox.getChildren().clear();
+                variablesVBox.getChildren().add(variablesText);
+
                 variablesText.setText("Variables");
-                variablesVBox.getChildren().remove(vBox);
+
+                Region topSpacer = new Region();
+                topSpacer.setMinHeight(10);
+                VBox.setVgrow(topSpacer, Priority.ALWAYS);
+                variablesVBox.getChildren().add(topSpacer);
+
                 variablesVBox.getChildren().add(secondVBox);
-                variablesVBox.getChildren().remove(variablesButton);
+
+                Region bottomSpacer = new Region();
+                bottomSpacer.setMinHeight(10);
+                VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
+                variablesVBox.getChildren().add(bottomSpacer);
+
+                variablesButton.setText("Click to Add");
                 variablesVBox.getChildren().add(variablesButton);
-                variablesButton.setText("Click to add...");
             });
         });
     }
