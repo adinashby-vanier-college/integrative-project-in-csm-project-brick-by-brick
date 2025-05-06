@@ -94,37 +94,37 @@
                                         <Insets bottom="20.0" left="20.0" right="10.0" top="20.0" />
                                     </HBox.margin>
                                     <children>
-                                        <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="xⁿ" GridPane.halignment="CENTER">
+                                        <Button fx:id="squareButton" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="xⁿ" GridPane.halignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="25.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="rad" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                                        <Button fx:id="radiantButton" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="25.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="rad" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                        <Button alignment="CENTER_RIGHT" layoutX="81.0" layoutY="25.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" style="-fx-alignment: CENTER; -fx-background-color: #F0A202;" text="C" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                                        <Button fx:id="clearButton" alignment="CENTER_RIGHT" layoutX="81.0" layoutY="25.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" style="-fx-alignment: CENTER; -fx-background-color: #F0A202;" text="C" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                        <Button layoutX="10.0" layoutY="25.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="sin" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                        <Button fx:id="sinButton" layoutX="10.0" layoutY="25.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="sin" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                        <Button layoutX="10.0" layoutY="80.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="cos" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                        <Button fx:id="cosButton" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="cos" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                        <Button layoutX="81.0" layoutY="80.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="tan" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                        <Button fx:id="tanButton" layoutX="81.0" layoutY="80.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="tan" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                          <Button alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" GridPane.rowIndex="2">
+                                          <Button fx:id="fracButton" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" GridPane.rowIndex="2">
                                               <graphic>
                                                   <VBox alignment="CENTER">
                                                       <children>
@@ -135,27 +135,27 @@
                                                   </VBox>
                                               </graphic>
                                           </Button>
-                                        <Button layoutX="10.0" layoutY="135.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="√" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                        <Button fx:id="rootButton" layoutX="10.0" layoutY="135.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="√" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="ⁿ√" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                              <Button fx:id="xrootButton" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="ⁿ√" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                        <Button layoutX="152.0" layoutY="135.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="ADD" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                        <Button fx:id="computeButton" layoutX="152.0" layoutY="135.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="=" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                        <Button layoutX="10.0" layoutY="190.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="d/dx" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                        <Button fx:id="derButton" layoutX="10.0" layoutY="190.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="d/dx" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                                        <Button layoutX="81.0" layoutY="190.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="∫" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                        <Button fx:id="intButton" layoutX="81.0" layoutY="190.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0" text="∫" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="16.0" />
                                  </font>

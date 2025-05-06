@@ -30,6 +30,19 @@ public class ProgrammingModeLogic {
         }
     }
 
+    /**
+     * Calculates the result of a mathematical expression.
+     * @param expression The expression to calculate
+     * @return The result of the calculation
+     */
+    public String calculate(String expression) {
+        try {
+            return computeEngine.evaluate(expression);
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
     public String generateCode() {
         return null;
     }
