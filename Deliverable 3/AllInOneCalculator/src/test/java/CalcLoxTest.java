@@ -172,7 +172,7 @@ public class CalcLoxTest {
                 fun addOne(a, b) {
                     return a + b + 1;
                 }
-                
+
                 var result = addOne(1, 2);
                 output result;
                 """;
@@ -249,6 +249,29 @@ public class CalcLoxTest {
         } catch (SuccessResult e) {
             assert e.result != null;
             assert e.result.equals("3.0");
+            return;
+        }
+
+        assert false;
+    }
+
+    @Test
+    public void testElseWithoutIf() {
+        CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+
+        String source = """
+                var a = 1;
+                else {
+                    a = 2;
+                }
+                output a;
+                """;
+
+        try {
+            CalcLoxRunner.run(frontend, source);
+        } catch (SuccessResult e) {
+            assert e.result != null;
+            assert e.result.equals("2.0");
             return;
         }
 

@@ -127,6 +127,11 @@ public class Interpreter implements Expr.Visitor<Object>, Statement.Visitor<Void
             globals.assign(expr.name, value);
         }
 
+        // Update the frontend's variables if the variable is assigned a new value
+        if (calculatorFrontend != null && calculatorFrontend.variables != null && value instanceof Double) {
+            calculatorFrontend.variables.put(expr.name.lexeme, (Double) value);
+        }
+
         return value;
     }
 
@@ -321,6 +326,12 @@ public class Interpreter implements Expr.Visitor<Object>, Statement.Visitor<Void
             value = evaluate(statement.initializer);
         }
         environment.define(statement.name.lexeme, value);
+
+        // Update the frontend's variables if the variable is declared with an initial value
+        if (calculatorFrontend != null && calculatorFrontend.variables != null && value instanceof Double) {
+            calculatorFrontend.variables.put(statement.name.lexeme, (Double) value);
+        }
+
         return null;
     }
 
