@@ -1,20 +1,24 @@
 package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import edu.vanier.brickbybrick.allinonecalculator.MainApp;
-import edu.vanier.brickbybrick.allinonecalculator.logic.GraphingCalculatorLogic;
 import edu.vanier.brickbybrick.allinonecalculator.dialogs.AboutDialog;
 import edu.vanier.brickbybrick.allinonecalculator.dialogs.SettingsDialog;
-import javafx.collections.ObservableList;
+import edu.vanier.brickbybrick.allinonecalculator.logic.GraphingCalculatorLogic;
 import javafx.fxml.FXML;
-import javafx.scene.chart.*;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +31,43 @@ public class GraphingCalculatorFXMLController {
 
     private final List<String> graphExpressions = new ArrayList<>();
 
+    private String currentExpression = "";
+    private String currentMathJSONStr = "";
+    private List<XYChart.Data<Number, Number>> currentResult = null;
+
+    @FXML
+    private WebView inputField;
+    private WebEngine engine;
+
     @FXML
     private LineChart<Number, Number> graphingChart;
+
+    @FXML
+    private Button squareButton;
+    @FXML
+    private Button radiantButton;
+    @FXML
+    private Button clearButton;
+    @FXML
+    private Button sinButton;
+    @FXML
+    private Button cosButton;
+    @FXML
+    private Button tanButton;
+    @FXML
+    private Button rootButton;
+    @FXML
+    private Button xrootButton;
+    @FXML
+    private Button fracButton;
+    //    @FXML
+//    private Button limitButton;
+    @FXML
+    private Button derButton;
+    @FXML
+    private Button intButton;
+    @FXML
+    private Button computeButton;
 
     @FXML
     private MenuBar menuBar;
@@ -48,6 +87,22 @@ public class GraphingCalculatorFXMLController {
         arithmeticModeSwitch.setOnAction(event -> MainApp.switchScene(MainApp.ARITHMETIC_CALCULATOR));
         graphingModeSwitch.setOnAction(event -> MainApp.switchScene(MainApp.GRAPHING_CALCULATOR));
         programmingModeSwitch.setOnAction(event -> MainApp.switchScene(MainApp.PROGRAMMING_MODE));
+        // Setting up the WebView for the input field.
+        URL url = this.getClass().getResource("/web/cortexjs.html");
+        assert url != null;
+        engine = inputField.getEngine();
+        engine.load(url.toExternalForm());
+        inputField.setStyle("color-scheme: dark;");
+
+        arithmeticModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.ARITHMETIC_CALCULATOR);
+        });
+        graphingModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.GRAPHING_CALCULATOR);
+        });
+        programmingModeSwitch.setOnAction(event -> {
+            MainApp.switchScene(MainApp.PROGRAMMING_MODE);
+        });
 
         NumberAxis xAxis = (NumberAxis) graphingChart.getXAxis();
         NumberAxis yAxis = (NumberAxis) graphingChart.getYAxis();
@@ -58,13 +113,150 @@ public class GraphingCalculatorFXMLController {
         xAxis.setAutoRanging(true);
         yAxis.setAutoRanging(true);
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Graph");
         graphingChart.setLegendVisible(false);
-        graphingChart.getData().add(series);
 
-        series.getData().add(new XYChart.Data<>(-10, -10));
-        series.getData().add(new XYChart.Data<>(150, 150));
+        // Compute button implementation
+        computeButton.setOnAction(event -> {
+            try {
+                logger.info("Compute button pressed");
+
+                // Get the current expression
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                logger.info("Current expression: " + currentValue);
+
+                // Get the MathJSON
+                String mathJson = (String) engine.executeScript("JSON.stringify(window.ce.parse(mf.getValue()).json)");
+                logger.info("MathJSON: " + mathJson);
+
+                // Calculate the result using our logic
+                XYChart.Series<Number, Number> series = new XYChart.Series<>();
+                List<XYChart.Data<Number, Number>> result = logic.getGraphData(mathJson);
+                logger.info("Calculated result: " + result);
+                for (XYChart.Data<Number, Number> data : result) {
+                    series.getData().add(data);
+                }
+                graphingChart.getData().add(series);
+
+                // Clear the old input.
+                String script = "mf.setValue('')";
+                logger.info("Executing script: " + script);
+                engine.executeScript(script);
+
+                // Update internal state
+                currentExpression = currentValue;
+                currentMathJSONStr = mathJson;
+                currentResult = result;
+
+                logger.info("Compute operation completed successfully");
+            } catch (Exception e) {
+                logger.error("Error in compute operation: " + e.getMessage(), e);
+                String errorMessage = "Error: " + e.getMessage();
+                engine.executeScript("mf.setValue('" + errorMessage + "')");
+            }
+        });
+
+        // Clear button implementation
+        clearButton.setOnAction(event -> {
+            if (engine != null) {
+                engine.executeScript("mf.setValue('')");
+                currentExpression = "";
+                currentMathJSONStr = "";
+            }
+        });
+
+        // Square button implementation
+        squareButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "^2";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Radiant button implementation
+        radiantButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + " rad";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Sin button implementation
+        sinButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "\\\\sin()";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Cos button implementation
+        cosButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "\\\\cos()";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Tan button implementation
+        tanButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "\\\\tan()";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Square root button implementation
+        rootButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                String newValue = currentValue + "\\\\sqrt{x}";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Nth root button implementation
+        xrootButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                // Clear previous content and set a clear template with placeholders
+                String newValue = "\\\\sqrt[n]{x}";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Fraction button implementation
+        fracButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                // Clear previous content and set a clear template with placeholders
+                String newValue = "\\frac{\\text{numerator}}{\\text{denominator}}";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Derivative button implementation
+        derButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                // Clear previous content and set a clear template with placeholders
+                String newValue = "\\\\dfrac{d}{dx}2x\\\\bigm{|}_{x=a}";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
+
+        // Integral button implementation
+        intButton.setOnAction(event -> {
+            if (engine != null) {
+                String currentValue = (String) engine.executeScript("mf.getValue()");
+                // Clear previous content and set a clear template with placeholders
+                String newValue = "\\\\[ \\\\int_{\\\\text{lower bound}}^{\\\\text{upper bound}} \\\\text{function(x)} \\\\,dx \\\\]";
+                engine.executeScript("mf.setValue('" + newValue + "')");
+            }
+        });
 
         setupMenuBar();
     }

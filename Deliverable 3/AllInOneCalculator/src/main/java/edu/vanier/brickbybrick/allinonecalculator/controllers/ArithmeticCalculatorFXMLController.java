@@ -207,7 +207,7 @@ public class ArithmeticCalculatorFXMLController {
         sinButton.setOnAction(event -> {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
-                String newValue = currentValue + "sin()";
+                String newValue = currentValue + "\\\\sin()";
                 engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
@@ -216,7 +216,7 @@ public class ArithmeticCalculatorFXMLController {
         cosButton.setOnAction(event -> {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
-                String newValue = currentValue + "cos()";
+                String newValue = currentValue + "\\\\cos()";
                 engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
@@ -225,7 +225,7 @@ public class ArithmeticCalculatorFXMLController {
         tanButton.setOnAction(event -> {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
-                String newValue = currentValue + "tan()";
+                String newValue = currentValue + "\\\\tan()";
                 engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
