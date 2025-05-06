@@ -3,15 +3,18 @@ package edu.vanier.brickbybrick.allinonecalculator.controllers;
 import edu.vanier.brickbybrick.allinonecalculator.MainApp;
 import edu.vanier.brickbybrick.allinonecalculator.helpers.VariableDialogHelper;
 import edu.vanier.brickbybrick.allinonecalculator.logic.ArithmeticCalculatorLogic;
+import edu.vanier.brickbybrick.allinonecalculator.utils.CalculatorSettings;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import netscape.javascript.JSObject;
 import org.slf4j.Logger;
@@ -90,7 +93,7 @@ public class ArithmeticCalculatorFXMLController {
         engine = inputField.getEngine();
         engine.load(url.toExternalForm());
         inputField.setStyle("color-scheme: dark;");
-
+        
         // Setup event listeners for the WebView.
         engine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
@@ -136,34 +139,34 @@ public class ArithmeticCalculatorFXMLController {
         computeButton.setOnAction(event -> {
             try {
                 logger.info("Compute button pressed");
-
+                
                 // Get the current expression
                 String currentValue = (String) engine.executeScript("mf.getValue()");
                 logger.info("Current expression: " + currentValue);
-
+                
                 // Get the MathJSON
                 String mathJson = (String) engine.executeScript("JSON.stringify(window.ce.parse(mf.getValue()).json)");
                 logger.info("MathJSON: " + mathJson);
-
+                
                 // Calculate the result using our logic
                 String result = logic.calculate(mathJson);
                 logger.info("Calculated result: " + result);
-
+                
                 // Update the display with the result
                 String script = "mf.setValue('" + result + "')";
                 logger.info("Executing script: " + script);
                 engine.executeScript(script);
-
+                
                 // Create and add history item
                 logger.info("Creating history item for expression: " + currentValue + ", result: " + result);
                 VBox historyItem = logic.createHistoryItem(currentValue, result);
                 historyVBox.getChildren().add(historyItem);
-
+                
                 // Update internal state
                 currentExpression = currentValue;
                 currentMathJSONStr = mathJson;
                 currentResult = result;
-
+                
                 logger.info("Compute operation completed successfully");
             } catch (Exception e) {
                 logger.error("Error in compute operation: " + e.getMessage(), e);
@@ -286,13 +289,13 @@ public class ArithmeticCalculatorFXMLController {
         if (engine != null) {
             try {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
-
+                
                 if (currentValue.isEmpty()) return;
-
+                
                 // Always remove the last character, regardless of forward/backward
                 String newValue = currentValue.substring(0, currentValue.length() - 1);
                 engine.executeScript("mf.setValue('" + newValue + "')");
-
+                
                 // Move cursor to end after deletion
                 engine.executeScript("mf.setCaretPosition(" + newValue.length() + ")");
             } catch (Exception e) {
@@ -387,25 +390,25 @@ public class ArithmeticCalculatorFXMLController {
             // Format: \frac{d}{dx}{function}
             java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\\\frac\\{d\\}\\{dx\\}\\{(.*?)\\}");
             java.util.regex.Matcher matcher = pattern.matcher(expression);
-
+            
             if (matcher.find()) {
                 String function = matcher.group(1).replace("\\text{function}", "").trim();
-
+                
                 if (function.isEmpty()) {
                     engine.executeScript("mf.setValue('Please enter a function to differentiate')");
                     return;
                 }
-
+                
                 String variable = "x"; // Default variable
                 double point = 0.0; // Default evaluation point
                 double h = 0.0001; // Small step size for numerical differentiation
-
+                
                 // Create MathJSON for derivative
                 String mathJson = String.format(
                     "[\"Derivative\", \"%s\", \"%s\", %f, %f]",
                     function, variable, point, h
                 );
-
+                
                 String result = logic.calculate(mathJson);
                 engine.executeScript("mf.setValue('" + result + "')");
             }
@@ -425,7 +428,7 @@ public class ArithmeticCalculatorFXMLController {
             // Format: \frac{numerator}{denominator}
             java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\\\frac\\{(.*?)\\}\\{(.*?)\\}");
             java.util.regex.Matcher matcher = pattern.matcher(expression);
-
+            
             if (matcher.find()) {
                 String numerator = matcher.group(1).replace("\\text{numerator}", "").trim();
                 String denominator = matcher.group(2).replace("\\text{denominator}", "").trim();
@@ -482,11 +485,11 @@ public class ArithmeticCalculatorFXMLController {
             String varValue = result.getValue();
 
             if (varName == null || varName.trim().isEmpty()) {
-                varName = "x"; 
+                varName = "x";
             }
 
             if (varValue == null || varValue.trim().isEmpty()) {
-                varValue = "0"; 
+                varValue = "0";
             }
             variables.put(varName, varValue);
 

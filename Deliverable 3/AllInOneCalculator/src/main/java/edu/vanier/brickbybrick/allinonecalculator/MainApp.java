@@ -45,8 +45,6 @@ public class MainApp extends Application {
             // Load the login scene first
             loginFXMLController = new LoginFXMLController();
             Parent root = FxUIHelper.loadFXML(LOGIN_SCENE, loginFXMLController);
-            // Load the scene of the primary stage.
-            mainSceneController = new MainSceneFXMLController();
             scene = new Scene(root, 800, 500);
             // Add the primary scene to the scene-switching controller.
             sceneController = new SceneController(scene);
@@ -55,12 +53,6 @@ public class MainApp extends Application {
             primaryStage.sizeToScene();
             primaryStage.setTitle("All In One Calculator, made by Brick by Brick");
             // Always show the application on top of other windows upon startup.
-
-            primaryStage.setMinHeight(525);
-            primaryStage.setMinWidth(800);
-
-            primaryStage.setResizable(true);
-
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
