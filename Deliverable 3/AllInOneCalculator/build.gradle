@@ -3,6 +3,8 @@ plugins {
     id 'application'
     // Load and apply the required JavaFX plugin.    
     id 'org.openjfx.javafxplugin' version '0.0.14'
+
+    id("com.gradleup.shadow") version "9.0.0-beta13"
 }
 
 def logbackVersion = "1.4.11"
