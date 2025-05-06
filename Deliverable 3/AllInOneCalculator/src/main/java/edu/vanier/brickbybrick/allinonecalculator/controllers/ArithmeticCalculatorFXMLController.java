@@ -213,7 +213,7 @@ public class ArithmeticCalculatorFXMLController {
         rootButton.setOnAction(event -> {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
-                String newValue = currentValue + "sqrt()";
+                String newValue = currentValue + "\\\\sqrt{x}";
                 engine.executeScript("mf.setValue('" + newValue + "')");
             }
         });
@@ -223,10 +223,8 @@ public class ArithmeticCalculatorFXMLController {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
                 // Clear previous content and set a clear template with placeholders
-                String newValue = "\\sqrt[\\text{root}]{}\\text{number}";
+                String newValue = "\\\\sqrt[n]{x}";
                 engine.executeScript("mf.setValue('" + newValue + "')");
-                // After setting the nth root template, call the handler
-                handleNthRoot();
             }
         });
 
@@ -473,41 +471,6 @@ public class ArithmeticCalculatorFXMLController {
             }
         } catch (Exception e) {
             logger.error("Error evaluating fraction: " + e.getMessage());
-            engine.executeScript("mf.setValue('Error: " + e.getMessage() + "')");
-        }
-    }
-
-    /**
-     * Handles the evaluation of nth root
-     */
-    private void handleNthRoot() {
-        try {
-            String expression = (String) engine.executeScript("mf.getValue()");
-            // Parse the nth root expression using regex to extract components
-            // Format: \sqrt[root]{number}
-            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\\\sqrt\\[(.*?)\\]\\{(.*?)\\}");
-            java.util.regex.Matcher matcher = pattern.matcher(expression);
-            
-            if (matcher.find()) {
-                String root = matcher.group(1).replace("\\text{root}", "").trim();
-                String number = matcher.group(2).replace("\\text{number}", "").trim();
-                
-                if (root.isEmpty() || number.isEmpty()) {
-                    engine.executeScript("mf.setValue('Please fill in both the root and the number')");
-                    return;
-                }
-                
-                // Create MathJSON for nth root
-                String mathJson = String.format(
-                    "[\"NthRoot\", %s, %s]",
-                    number, root
-                );
-                
-                String result = logic.calculate(mathJson);
-                engine.executeScript("mf.setValue('" + result + "')");
-            }
-        } catch (Exception e) {
-            logger.error("Error evaluating nth root: " + e.getMessage());
             engine.executeScript("mf.setValue('Error: " + e.getMessage() + "')");
         }
     }

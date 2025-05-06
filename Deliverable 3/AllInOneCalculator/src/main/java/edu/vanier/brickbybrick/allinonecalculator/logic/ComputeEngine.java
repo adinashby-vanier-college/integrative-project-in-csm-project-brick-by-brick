@@ -168,8 +168,11 @@ public class ComputeEngine {
                 return derivative(args);
             case "Fraction":
                 return fraction(args);
-            case "NthRoot":
-                return nthRoot(args);
+            case "Root":
+                return root(args);
+            case "Negate":
+                if (args.length != 1) throw new JSONException("Negate requires exactly 1 argument");
+                return -toDouble(args[0]);
             default:
                 throw new JSONException("Unknown operator: " + operator);
         }
@@ -313,7 +316,7 @@ public class ComputeEngine {
     }
 
     // Nth root function
-    private double nthRoot(Object[] args) {
+    private double root(Object[] args) {
         if (args.length != 2) throw new JSONException("NthRoot requires 2 arguments: number and root");
         double number = toDouble(args[0]);
         double root = toDouble(args[1]);
