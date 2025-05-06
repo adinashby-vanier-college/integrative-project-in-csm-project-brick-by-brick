@@ -1,6 +1,7 @@
 package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import edu.vanier.brickbybrick.allinonecalculator.MainApp;
+import edu.vanier.brickbybrick.allinonecalculator.helpers.VariableDialogHelper;
 import edu.vanier.brickbybrick.allinonecalculator.logic.ProgrammingModeLogic;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,11 +11,14 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,7 +28,7 @@ public class ProgrammingModeFXMLController {
     private final static Logger logger = LoggerFactory.getLogger(ProgrammingModeFXMLController.class);
     private final static ProgrammingModeLogic logic = new ProgrammingModeLogic();
 
-    private final List<String> variables = new ArrayList<>();
+    private final HashMap<String, String> variables = new HashMap<>();
     private final List<String> addedInstructions = new ArrayList<>();
 
     @FXML
@@ -57,6 +61,8 @@ public class ProgrammingModeFXMLController {
         variablesVBox.setAlignment(Pos.TOP_CENTER);
         variablesVBox.setSpacing(10);
 
+        initializeVariablesList();
+
         arithmeticModeSwitch.setOnAction(event -> {
             MainApp.switchScene(MainApp.ARITHMETIC_CALCULATOR);
         });
@@ -65,6 +71,10 @@ public class ProgrammingModeFXMLController {
         });
         programmingModeSwitch.setOnAction(event -> {
             MainApp.switchScene(MainApp.PROGRAMMING_MODE);
+        });
+
+        variablesButton.setOnAction(event -> {
+            addVariable();
         });
 
         addButton.setOnAction(event -> {
@@ -148,27 +158,84 @@ public class ProgrammingModeFXMLController {
             variablesVBox.getChildren().add(variablesButton);
 
             variablesButton.setOnAction(event2 -> {
-                variablesVBox.getChildren().clear();
-                variablesVBox.getChildren().add(variablesText);
-
-                variablesText.setText("Variables");
-
-                Region topSpacer = new Region();
-                topSpacer.setMinHeight(10);
-                VBox.setVgrow(topSpacer, Priority.ALWAYS);
-                variablesVBox.getChildren().add(topSpacer);
-
-                variablesVBox.getChildren().add(secondVBox);
-
-                Region bottomSpacer = new Region();
-                bottomSpacer.setMinHeight(10);
-                VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
-                variablesVBox.getChildren().add(bottomSpacer);
-
-                variablesButton.setText("Click to Add");
-                variablesVBox.getChildren().add(variablesButton);
+                showVariablesView();
             });
         });
+    }
+
+    /**
+     * Shows the variables view
+     */
+    private void showVariablesView() {
+        variablesVBox.getChildren().clear();
+        variablesVBox.getChildren().add(variablesText);
+
+        variablesText.setText("Variables");
+
+        Region topSpacer = new Region();
+        topSpacer.setMinHeight(10);
+        VBox.setVgrow(topSpacer, Priority.ALWAYS);
+        variablesVBox.getChildren().add(topSpacer);
+
+        // Update the secondVBox with the current variables
+        updateVariablesUI();
+        variablesVBox.getChildren().add(secondVBox);
+
+        Region bottomSpacer = new Region();
+        bottomSpacer.setMinHeight(10);
+        VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
+        variablesVBox.getChildren().add(bottomSpacer);
+
+        variablesButton.setText("Click to Add");
+        variablesVBox.getChildren().add(variablesButton);
+
+        variablesButton.setOnAction(event -> {
+            addVariable();
+        });
+    }
+
+    private void initializeVariablesList() {
+        updateVariablesUI();
+    }
+
+    private void updateVariablesUI() {
+        secondVBox.getChildren().clear();
+
+        for (String varName : variables.keySet()) {
+            String varValue = variables.get(varName);
+
+            Text variableText = new Text(varName + " = " + varValue);
+            variableText.setFont(new Font(23.0));
+
+            VBox.setMargin(variableText, new Insets(0, 0, 20, 10));
+
+            secondVBox.getChildren().add(variableText);
+        }
+    }
+
+    private void addVariable() {
+        Pair<String, String> result = VariableDialogHelper.showAddVariableDialog();
+
+        if (result != null) {
+            String varName = result.getKey();
+            String varValue = result.getValue();
+
+            if (varName == null || varName.trim().isEmpty()) {
+                varName = "x"; 
+            }
+
+            if (varValue == null || varValue.trim().isEmpty()) {
+                varValue = "0"; 
+            }
+
+            variables.put(varName, varValue);
+
+            updateVariablesUI();
+
+            logger.info("Added variable: " + varName + " = " + varValue);
+
+            showVariablesView();
+        }
     }
 
 }

@@ -188,14 +188,6 @@
                                                 <Insets bottom="10.0" top="10.0" />
                                             </VBox.margin>
                                             <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="x = 3">
-                                                    <VBox.margin>
-                                                        <Insets bottom="20.0" left="10.0" />
-                                                    </VBox.margin>
-                                                    <font>
-                                                        <Font size="23.0" />
-                                                    </font>
-                                                </Text>
                                             </children>
                                         </VBox>
                                         <Region fx:id="spacer2" VBox.vgrow="ALWAYS" />
