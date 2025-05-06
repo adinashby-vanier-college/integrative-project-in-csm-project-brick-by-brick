@@ -3,6 +3,8 @@ package edu.vanier.brickbybrick.allinonecalculator.logic;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -106,12 +108,16 @@ public class ComputeEngine {
      */
     private Object evaluateExpression(Object expression) {
         if (expression instanceof JSONArray) {
+            logger.info("Evaluating JSONArray: " + expression);
             return evaluateFunction((JSONArray) expression);
         } else if (expression instanceof JSONObject) {
+            logger.info("Evaluating JSONObject: " + expression);
             return evaluateObject((JSONObject) expression);
         } else if (expression instanceof String) {
+            logger.info("Evaluating String: " + expression);
             return evaluateSymbol((String) expression);
         } else if (expression instanceof Number) {
+            logger.info("Evaluating Number: " + expression);
             return expression;
         }
         throw new JSONException("Invalid expression type");
@@ -128,7 +134,18 @@ public class ComputeEngine {
         }
 
         String operator = function.getString(0);
+
         Object[] args = new Object[function.length() - 1];
+
+        if (operator.equals("Integrate")) {
+            // Special Integration Operation
+            // This is added so that the inner functions with "x" won't be evaluated before numbers being assigned.
+            for (int i = 1; i < function.length(); i++) {
+                args[i - 1] = function.get(i);
+            }
+            return integrate(args);
+        }
+
         for (int i = 1; i < function.length(); i++) {
             args[i - 1] = evaluateExpression(function.get(i));
         }
@@ -143,6 +160,7 @@ public class ComputeEngine {
      * @return The result of applying the operator
      */
     private Object applyOperator(String operator, Object[] args) {
+        logger.info("Applying operator: " + operator);
         switch (operator) {
             case "Add":
                 return add(args);
@@ -162,8 +180,8 @@ public class ComputeEngine {
                 return tan(args);
             case "Sqrt":
                 return sqrt(args);
-            case "Integral":
-                return integral(args);
+            case "Integrate":
+                throw new RuntimeException("Integrate should not be applied here. It should be handled separately.");
             case "Derivative":
                 return derivative(args);
             case "Fraction":
@@ -173,6 +191,13 @@ public class ComputeEngine {
             case "Negate":
                 if (args.length != 1) throw new JSONException("Negate requires exactly 1 argument");
                 return -toDouble(args[0]);
+            case "Tuple":
+                if (args.length < 1) throw new JSONException("Tuple requires at least 1 argument");
+                JSONArray tuple = new JSONArray();
+                for (Object arg : args) {
+                    tuple.put(arg);
+                }
+                return tuple;
             default:
                 throw new JSONException("Unknown operator: " + operator);
         }
@@ -238,45 +263,39 @@ public class ComputeEngine {
     }
 
     // Calculus operations
-    private double integral(Object[] args) {
-        if (args.length != 4) throw new JSONException("Integral requires 4 arguments: function, variable, lower bound, upper bound");
-        String function = args[0].toString();
-        double a = toDouble(args[2]); // lower bound
-        double b = toDouble(args[3]); // upper bound
-        
-        // Number of subintervals (n) - using a large number for better approximation
-        int n = 1000;
-        double deltaX = (b - a) / n;
-        double sum = 0;
-        
-        // Riemann sum using right endpoints
-        for (int i = 1; i <= n; i++) {
-            double x = a + i * deltaX;
-            // For polynomial functions like x^2, directly calculate f(x)
-            if (function.contains("x^2")) {
-                sum += (x * x) * deltaX;
-            }
-            // For sin(x)
-            else if (function.contains("sin(x)")) {
-                sum += Math.sin(x) * deltaX;
-            }
-            // For e^x
-            else if (function.contains("e^x")) {
-                sum += Math.exp(x) * deltaX;
-            }
-            // For 1/x
-            else if (function.contains("1/x")) {
-                sum += (1.0 / x) * deltaX;
-            }
-            // For linear functions
-            else if (function.equals("x")) {
-                sum += x * deltaX;
-            }
-            else {
-                throw new JSONException("Unsupported function for integration: " + function);
-            }
+    private double integrate(Object[] args) {
+        logger.info("Integrating function with args: " + Arrays.toString(args));
+        if (args.length != 2) throw new JSONException("Integral requires 2 arguments: function, and a tuple containing integration variable and bounds");
+        if (!(args[1] instanceof JSONArray tuple)) {
+            throw new JSONException("Second argument must be a tuple containing variable and bounds");
         }
-        
+        if (((JSONArray) args[1]).length() != 4) {
+            throw new JSONException("Tuple must contain 4 elements: variable, lower bound, upper bound, and step size");
+        }
+
+        Object function = args[0];
+        String variable = tuple.getString(1);
+        double lowerBound = toDouble(tuple.get(2));
+        double upperBound = toDouble(tuple.get(3));
+
+        logger.info("Integrating function: " + function + " with variable: " + variable + ", lower bound: " + lowerBound + ", upper bound: " + upperBound);
+
+        // Use Riemann sum to approximate the integral.
+        int steps = 1000; // Number of steps for approximation
+        double stepSize = (upperBound - lowerBound) / steps;
+        double sum = 0.0;
+
+        for (int i = 0; i < steps; i++) {
+            // Use a separate Compute Engine instance with the variable set to the current point.
+            ComputeEngine tempEngine = new ComputeEngine();
+            Map<String, Double> tempVariables = new HashMap<>(variables);
+            tempVariables.put(variable, lowerBound + i * stepSize);
+            tempEngine.setVariables(tempVariables);
+            Object result = tempEngine.evaluateExpression(function);
+            double f = toDouble(result);
+            sum += f * stepSize;
+        }
+
         return sum;
     }
 

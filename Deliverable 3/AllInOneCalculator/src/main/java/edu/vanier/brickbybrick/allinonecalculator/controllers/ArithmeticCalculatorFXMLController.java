@@ -245,7 +245,7 @@ public class ArithmeticCalculatorFXMLController {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
                 // Clear previous content and set a clear template with placeholders
-                String newValue = "\\frac{d}{dx}{\\text{function}}";
+                String newValue = "\\\\dfrac{d}{dx}2x\\\\bigm{|}_{x=a}";
                 engine.executeScript("mf.setValue('" + newValue + "')");
                 // After setting the derivative template, call the handler
                 handleDerivative();
@@ -257,10 +257,8 @@ public class ArithmeticCalculatorFXMLController {
             if (engine != null) {
                 String currentValue = (String) engine.executeScript("mf.getValue()");
                 // Clear previous content and set a clear template with placeholders
-                String newValue = "\\int_{\\text{lower bound}}^{\\text{upper bound}}{\\text{function}}";
+                String newValue = "\\\\[ \\\\int_{\\\\text{lower bound}}^{\\\\text{upper bound}} \\\\text{function(x)} \\\\,dx \\\\]";
                 engine.executeScript("mf.setValue('" + newValue + "')");
-                // After setting the integral template, call the handler
-                handleIntegral();
             }
         });
     }
@@ -360,44 +358,6 @@ public class ArithmeticCalculatorFXMLController {
         currentResult = result;
     }
     //< WebView Event Handlers
-
-    /**
-     * Handles the evaluation of integrals using Riemann sum approximation
-     */
-    private void handleIntegral() {
-        try {
-            String expression = (String) engine.executeScript("mf.getValue()");
-            // Parse the integral expression using regex to extract components
-            // Format: \int_{lower}^{upper}{function}
-            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\\\int_\\{(.*?)\\}\\^\\{(.*?)\\}\\{(.*?)\\}");
-            java.util.regex.Matcher matcher = pattern.matcher(expression);
-            
-            if (matcher.find()) {
-                String lowerBound = matcher.group(1).replace("\\text{lower bound}", "").trim();
-                String upperBound = matcher.group(2).replace("\\text{upper bound}", "").trim();
-                String function = matcher.group(3).replace("\\text{function}", "").trim();
-                
-                if (lowerBound.isEmpty() || upperBound.isEmpty() || function.isEmpty()) {
-                    engine.executeScript("mf.setValue('Please fill in all fields: lower bound, upper bound, and function')");
-                    return;
-                }
-                
-                String variable = "x"; // Default variable
-                
-                // Create MathJSON for integral
-                String mathJson = String.format(
-                    "[\"Integral\", \"%s\", \"%s\", %s, %s]",
-                    function, variable, lowerBound, upperBound
-                );
-                
-                String result = logic.calculate(mathJson);
-                engine.executeScript("mf.setValue('" + result + "')");
-            }
-        } catch (Exception e) {
-            logger.error("Error evaluating integral: " + e.getMessage());
-            engine.executeScript("mf.setValue('Error: " + e.getMessage() + "')");
-        }
-    }
 
     /**
      * Handles the evaluation of derivatives using central difference approximation
