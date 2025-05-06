@@ -1,6 +1,8 @@
 package edu.vanier.brickbybrick.allinonecalculator.controllers;
 
 import edu.vanier.brickbybrick.allinonecalculator.MainApp;
+import edu.vanier.brickbybrick.allinonecalculator.calclox.CalcLoxRunner;
+import edu.vanier.brickbybrick.allinonecalculator.calclox.CalculatorFrontend;
 import edu.vanier.brickbybrick.allinonecalculator.helpers.VariableDialogHelper;
 import edu.vanier.brickbybrick.allinonecalculator.logic.ProgrammingModeLogic;
 import javafx.collections.ObservableList;
@@ -11,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -35,6 +38,69 @@ public class ProgrammingModeFXMLController {
 
     private final HashMap<String, String> variables = new HashMap<>();
     private final List<String> addedInstructions = new ArrayList<>();
+
+    /**
+     * Implementation of CalculatorFrontend for the programming mode.
+     */
+    private class CalculatorFrontendImpl extends CalculatorFrontend {
+        public CalculatorFrontendImpl() {
+            this.variables = new HashMap<>();
+            // Copy variables from the controller to the frontend
+            for (String varName : ProgrammingModeFXMLController.this.variables.keySet()) {
+                try {
+                    double value = Double.parseDouble(ProgrammingModeFXMLController.this.variables.get(varName));
+                    this.variables.put(varName, value);
+                } catch (NumberFormatException e) {
+                    logger.warn("Failed to parse variable value: " + varName + " = " + 
+                        ProgrammingModeFXMLController.this.variables.get(varName));
+                }
+            }
+        }
+
+        @Override
+        public void output(String result) {
+            logger.info("CalcLox output: " + result);
+            System.out.println("CalcLox output method called with result: " + result);
+        }
+    }
+
+    /**
+     * Appends variable declarations to the source code.
+     * @param source The original source code
+     * @return The source code with variable declarations appended at the beginning
+     */
+    private String appendVariablesToSource(String source) {
+        StringBuilder result = new StringBuilder();
+
+        // Append each variable as a declaration
+        for (String varName : variables.keySet()) {
+            String varValue = variables.get(varName);
+            result.append("var ").append(varName).append(" = ").append(varValue).append("; ");
+        }
+
+        // Append the original source code
+        result.append(source);
+
+        logger.info("Source code with variables: " + result.toString());
+        return result.toString();
+    }
+
+    /**
+     * Test method to verify that the output method is called correctly.
+     * This method is called from the initialize method.
+     */
+    private void testOutputMethod() {
+        System.out.println("Testing output method...");
+        CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+        String source = "output \"Test output\";";
+        try {
+            CalcLoxRunner.run(frontend, source);
+            System.out.println("CalcLoxRunner.run completed successfully");
+        } catch (Exception e) {
+            System.out.println("Exception in CalcLoxRunner.run: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     // Fields for math input
     private String currentExpression = "";
@@ -96,6 +162,9 @@ public class ProgrammingModeFXMLController {
     @FXML
     private void initialize() {
         logger.info("Initializing CalculatorProgrammingFXMLController...");
+
+        // Test the output method
+        testOutputMethod();
 
         // Setting up the WebView for the input field
         URL url = this.getClass().getResource("/web/cortexjs.html");
@@ -312,7 +381,31 @@ public class ProgrammingModeFXMLController {
                 System.out.println("Clicked on If condition");
                 VBox vBox2 = new VBox();
                 vBox2.getChildren().add(new Text("If condition"));
-                vBox2.getChildren().add(new TextField("Enter condition"));
+                TextField textField = new TextField();
+                textField.setPromptText("if (a > b) { a = b; }");
+                textField.setOnKeyPressed(keyEvent -> {
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        String source = textField.getText();
+                        if (source != null && !source.trim().isEmpty()) {
+                            logger.info("Running CalcLox code: " + source);
+                            CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+                            // Add an output statement to the source code
+                            String sourceWithOutput = source + "\noutput \"Execution completed\";";
+                            String sourceWithVariables = appendVariablesToSource(sourceWithOutput);
+                            System.out.println("Source with variables: " + sourceWithVariables);
+                            try {
+                                CalcLoxRunner.run(frontend, sourceWithVariables);
+                                System.out.println("CalcLoxRunner.run completed successfully");
+                            } catch (Exception e) {
+                                System.out.println("Exception in CalcLoxRunner.run: " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                            // Update variables from frontend after CalcLox execution
+                            updateVariablesFromFrontend(frontend);
+                        }
+                    }
+                });
+                vBox2.getChildren().add(textField);
                 vBox2.setPadding(new Insets(5, 0, 5, 0));
                 instructionsVBox.getChildren().add(vBox2);
             });
@@ -321,7 +414,31 @@ public class ProgrammingModeFXMLController {
                 System.out.println("Clicked on else condition");
                 VBox vBox2 = new VBox();
                 vBox2.getChildren().add(new Text("Else condition"));
-                vBox2.getChildren().add(new TextField("Enter condition"));
+                TextField textField = new TextField();
+                textField.setPromptText("else { b = a; }");
+                textField.setOnKeyPressed(keyEvent -> {
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        String source = textField.getText();
+                        if (source != null && !source.trim().isEmpty()) {
+                            logger.info("Running CalcLox code: " + source);
+                            CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+                            // Add an output statement to the source code
+                            String sourceWithOutput = source + "\noutput \"Execution completed\";";
+                            String sourceWithVariables = appendVariablesToSource(sourceWithOutput);
+                            System.out.println("Source with variables: " + sourceWithVariables);
+                            try {
+                                CalcLoxRunner.run(frontend, sourceWithVariables);
+                                System.out.println("CalcLoxRunner.run completed successfully");
+                            } catch (Exception e) {
+                                System.out.println("Exception in CalcLoxRunner.run: " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                            // Update variables from frontend after CalcLox execution
+                            updateVariablesFromFrontend(frontend);
+                        }
+                    }
+                });
+                vBox2.getChildren().add(textField);
                 vBox2.setPadding(new Insets(5, 0, 5, 0));
                 instructionsVBox.getChildren().add(vBox2);
             });
@@ -330,7 +447,31 @@ public class ProgrammingModeFXMLController {
                 System.out.println("Clicked on While condition");
                 VBox vBox2 = new VBox();
                 vBox2.getChildren().add(new Text("While condition"));
-                vBox2.getChildren().add(new TextField("Enter condition"));
+                TextField textField = new TextField();
+                textField.setPromptText("while (a < b) { a = a+1; }");
+                textField.setOnKeyPressed(keyEvent -> {
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        String source = textField.getText();
+                        if (source != null && !source.trim().isEmpty()) {
+                            logger.info("Running CalcLox code: " + source);
+                            CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+                            // Add an output statement to the source code
+                            String sourceWithOutput = source + "\noutput \"Execution completed\";";
+                            String sourceWithVariables = appendVariablesToSource(sourceWithOutput);
+                            System.out.println("Source with variables: " + sourceWithVariables);
+                            try {
+                                CalcLoxRunner.run(frontend, sourceWithVariables);
+                                System.out.println("CalcLoxRunner.run completed successfully");
+                            } catch (Exception e) {
+                                System.out.println("Exception in CalcLoxRunner.run: " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                            // Update variables from frontend after CalcLox execution
+                            updateVariablesFromFrontend(frontend);
+                        }
+                    }
+                });
+                vBox2.getChildren().add(textField);
                 vBox2.setPadding(new Insets(5, 0, 5, 0));
                 instructionsVBox.getChildren().add(vBox2);
             });
@@ -339,7 +480,31 @@ public class ProgrammingModeFXMLController {
                 System.out.println("clicked on When clicked");
                 VBox vBox2 = new VBox();
                 vBox2.getChildren().add(new Text("When clicked"));
-                vBox2.getChildren().add(new TextField("Enter event"));
+                TextField textField = new TextField();
+                textField.setPromptText("y = y + 1;");
+                textField.setOnKeyPressed(keyEvent -> {
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        String source = textField.getText();
+                        if (source != null && !source.trim().isEmpty()) {
+                            logger.info("Running CalcLox code: " + source);
+                            CalculatorFrontendImpl frontend = new CalculatorFrontendImpl();
+                            // Add an output statement to the source code
+                            String sourceWithOutput = source + "\noutput \"Execution completed\";";
+                            String sourceWithVariables = appendVariablesToSource(sourceWithOutput);
+                            System.out.println("Source with variables: " + sourceWithVariables);
+                            try {
+                                CalcLoxRunner.run(frontend, sourceWithVariables);
+                                System.out.println("CalcLoxRunner.run completed successfully");
+                            } catch (Exception e) {
+                                System.out.println("Exception in CalcLoxRunner.run: " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                            // Update variables from frontend after CalcLox execution
+                            updateVariablesFromFrontend(frontend);
+                        }
+                    }
+                });
+                vBox2.getChildren().add(textField);
                 vBox2.setPadding(new Insets(5, 0, 5, 0));
                 instructionsVBox.getChildren().add(vBox2);
             });
@@ -419,6 +584,32 @@ public class ProgrammingModeFXMLController {
             VBox.setMargin(variableText, new Insets(0, 0, 20, 10));
 
             secondVBox.getChildren().add(variableText);
+        }
+    }
+
+    /**
+     * Updates the controller's variables from the frontend's variables,
+     * updates the ComputeEngine with the new variables, and updates the UI.
+     * @param frontend The CalculatorFrontendImpl instance with updated variables
+     */
+    private void updateVariablesFromFrontend(CalculatorFrontendImpl frontend) {
+        if (frontend.variables != null) {
+            // Copy variables from the frontend to the controller
+            for (String varName : frontend.variables.keySet()) {
+                Double value = frontend.variables.get(varName);
+                if (value != null) {
+                    // Update the controller's variables
+                    variables.put(varName, value.toString());
+
+                    // Update the ComputeEngine
+                    logic.addVariableToComputeEngine(varName, value.toString());
+
+                    logger.info("Updated variable from CalcLox: " + varName + " = " + value);
+                }
+            }
+
+            // Update the UI
+            updateVariablesUI();
         }
     }
 

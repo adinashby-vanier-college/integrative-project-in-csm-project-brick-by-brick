@@ -150,6 +150,14 @@ public class Parser {
         if (match(WHILE)) return whileStatement();
         if (match(FOR)) return forStatement();
         if (match(LEFT_BRACE)) return new Statement.Block(block());
+        if (match(ELSE)) {
+            // If we encounter an else without a preceding if, create a default if statement
+            // with a false condition so that the else branch is executed
+            Expr condition = new Expr.Literal(false); // Always false condition
+            Statement thenBranch = new Statement.Expression(new Expr.Literal(null)); // Empty then branch
+            Statement elseBranch = statement(); // Parse the else branch
+            return new Statement.If(condition, thenBranch, elseBranch);
+        }
         return expressionStatement();
     }
 
