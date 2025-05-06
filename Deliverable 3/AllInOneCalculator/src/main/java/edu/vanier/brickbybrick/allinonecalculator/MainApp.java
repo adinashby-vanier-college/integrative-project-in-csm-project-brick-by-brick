@@ -47,6 +47,12 @@ public class MainApp extends Application {
             Parent root = FxUIHelper.loadFXML(LOGIN_SCENE, loginFXMLController);
             scene = new Scene(root, 800, 500);
             // Add the primary scene to the scene-switching controller.
+            
+            primaryStage.setMinHeight(525);
+            primaryStage.setMinWidth(800);
+
+            primaryStage.setResizable(true);
+            
             sceneController = new SceneController(scene);
             sceneController.addScene(LOGIN_SCENE, root);
             primaryStage.setScene(scene);

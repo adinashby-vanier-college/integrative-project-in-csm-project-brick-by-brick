@@ -5,6 +5,7 @@ import edu.vanier.brickbybrick.allinonecalculator.dialogs.AboutDialog;
 import edu.vanier.brickbybrick.allinonecalculator.dialogs.SettingsDialog;
 import edu.vanier.brickbybrick.allinonecalculator.logic.GraphingCalculatorLogic;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -12,6 +13,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -21,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.paint.Color;
 
 /**
  * The FMXL Controller class for the Graphing Calculator.
@@ -29,11 +37,45 @@ public class GraphingCalculatorFXMLController {
     private final static Logger logger = LoggerFactory.getLogger(GraphingCalculatorFXMLController.class);
     private final static GraphingCalculatorLogic logic = new GraphingCalculatorLogic();
 
-    private final List<String> graphExpressions = new ArrayList<>();
+    /**
+     * Class to represent a graph equation with its color
+     */
+    private static class GraphEquation {
+        private final String expression;
+        private final Color color;
+        private final XYChart.Series<Number, Number> series;
+
+        public GraphEquation(String expression, Color color, XYChart.Series<Number, Number> series) {
+            this.expression = expression;
+            this.color = color;
+            this.series = series;
+        }
+
+        public String getExpression() {
+            return expression;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public XYChart.Series<Number, Number> getSeries() {
+            return series;
+        }
+    }
+
+    private final List<GraphEquation> graphEquations = new ArrayList<>();
+    private final Color[] colors = {
+        Color.ORANGE, Color.BLUE, Color.GREEN, Color.RED, 
+        Color.PURPLE, Color.BROWN, Color.PINK, Color.CYAN
+    };
 
     private String currentExpression = "";
     private String currentMathJSONStr = "";
     private List<XYChart.Data<Number, Number>> currentResult = null;
+
+    @FXML
+    private VBox equationsVBox;
 
     @FXML
     private WebView inputField;
@@ -115,6 +157,9 @@ public class GraphingCalculatorFXMLController {
 
         graphingChart.setLegendVisible(false);
 
+        // Clear the example equation
+        equationsVBox.getChildren().clear();
+
         // Compute button implementation
         computeButton.setOnAction(event -> {
             try {
@@ -123,6 +168,11 @@ public class GraphingCalculatorFXMLController {
                 // Get the current expression
                 String currentValue = (String) engine.executeScript("mf.getValue()");
                 logger.info("Current expression: " + currentValue);
+
+                if (currentValue == null || currentValue.trim().isEmpty()) {
+                    logger.warn("Empty expression, ignoring");
+                    return;
+                }
 
                 // Get the MathJSON
                 String mathJson = (String) engine.executeScript("JSON.stringify(window.ce.parse(mf.getValue()).json)");
@@ -135,7 +185,26 @@ public class GraphingCalculatorFXMLController {
                 for (XYChart.Data<Number, Number> data : result) {
                     series.getData().add(data);
                 }
+
+                // Get a color for this equation
+                Color color = getNextColor();
+
+                // Add the equation to our list
+                GraphEquation equation = new GraphEquation(currentValue, color, series);
+                graphEquations.add(equation);
+
+                // Add the series to the chart
                 graphingChart.getData().add(series);
+
+                // Set the color of the series
+                String colorString = String.format("#%02X%02X%02X", 
+                    (int)(color.getRed() * 255), 
+                    (int)(color.getGreen() * 255), 
+                    (int)(color.getBlue() * 255));
+                series.getNode().setStyle("-fx-stroke: " + colorString + ";");
+
+                // Update the equations display
+                updateEquationsDisplay();
 
                 // Clear the old input.
                 String script = "mf.setValue('')";
@@ -287,5 +356,43 @@ public class GraphingCalculatorFXMLController {
             AboutDialog aboutDialog = new AboutDialog(stage);
             aboutDialog.showAndWait();
         });
+    }
+
+    /**
+     * Gets the next color from the colors array for a new equation
+     * @return The next color to use
+     */
+    private Color getNextColor() {
+        int index = graphEquations.size() % colors.length;
+        return colors[index];
+    }
+
+    /**
+     * Updates the equations display in the UI
+     */
+    private void updateEquationsDisplay() {
+        equationsVBox.getChildren().clear();
+
+        for (GraphEquation equation : graphEquations) {
+            // Create an HBox for this equation
+            HBox hbox = new HBox();
+            hbox.setSpacing(10);
+            hbox.setPadding(new Insets(5, 5, 5, 5));
+
+            // Create a circle with the equation's color
+            Circle circle = new Circle(13, equation.getColor());
+            circle.setStroke(Color.BLACK);
+            circle.setStrokeType(StrokeType.INSIDE);
+
+            // Create a text with the equation's expression
+            Text text = new Text("y = " + equation.getExpression());
+            text.setFont(new Font(22));
+
+            // Add the circle and text to the HBox
+            hbox.getChildren().addAll(circle, text);
+
+            // Add the HBox to the equationsVBox
+            equationsVBox.getChildren().add(hbox);
+        }
     }
 }
