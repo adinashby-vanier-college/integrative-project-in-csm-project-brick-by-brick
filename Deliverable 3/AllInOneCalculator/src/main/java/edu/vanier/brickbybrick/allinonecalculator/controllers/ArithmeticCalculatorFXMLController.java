@@ -287,32 +287,13 @@ public class ArithmeticCalculatorFXMLController {
     //> Keyboard Event Handlers
     private void handleDelete(boolean forward) {
         if (engine != null) {
-            try {
-                String currentValue = (String) engine.executeScript("mf.getValue()");
-                
-                if (currentValue.isEmpty()) return;
-                
-                // Always remove the last character, regardless of forward/backward
-                String newValue = currentValue.substring(0, currentValue.length() - 1);
-                engine.executeScript("mf.setValue('" + newValue + "')");
-                
-                // Move cursor to end after deletion
-                engine.executeScript("mf.setCaretPosition(" + newValue.length() + ")");
-            } catch (Exception e) {
-                logger.error("Error handling delete: " + e.getMessage());
-            }
+            engine.executeScript("mf.executeCommand(\"delete" + (forward ? "Forward" : "Backward") + "\");");
         }
     }
 
     private void handleMove(boolean next) {
         if (engine != null) {
-            try {
-                // Move to end of expression
-                String currentValue = (String) engine.executeScript("mf.getValue()");
-                engine.executeScript("mf.setCaretPosition(" + currentValue.length() + ")");
-            } catch (Exception e) {
-                logger.error("Error handling move: " + e.getMessage());
-            }
+            engine.executeScript("mf.executeCommand(\"move" + (next ? "ToNextChar" : "ToPreviousChar") + "\");");
         }
     }
 
@@ -321,19 +302,10 @@ public class ArithmeticCalculatorFXMLController {
         inputField.setOnKeyPressed(event -> {
             logger.info("Key pressed. Code: " + event.getCode());
             switch (event.getCode()) {
-                case BACK_SPACE, DELETE -> handleDelete(true); // Both keys remove last character
-                case LEFT, RIGHT -> handleMove(true); // Both keys move to end
-                case HOME -> {
-                    if (engine != null) {
-                        engine.executeScript("mf.setCaretPosition(0)");
-                    }
-                }
-                case END -> {
-                    if (engine != null) {
-                        String currentValue = (String) engine.executeScript("mf.getValue()");
-                        engine.executeScript("mf.setCaretPosition(" + currentValue.length() + ")");
-                    }
-                }
+                case BACK_SPACE -> handleDelete(false);
+                case DELETE -> handleDelete(true);
+                case LEFT -> handleMove(false);
+                case RIGHT -> handleMove(true);
             }
         });
         logger.info("Input Field Keyboard Event Handlers setup complete.");

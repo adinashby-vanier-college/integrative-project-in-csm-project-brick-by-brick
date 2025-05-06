@@ -171,7 +171,7 @@ public class ComputeEngine {
                 return subtract(args);
             case "Multiply":
                 return multiply(args);
-            case "Divide":
+            case "Rational":
                 return divide(args);
             case "Power":
                 return power(args);
