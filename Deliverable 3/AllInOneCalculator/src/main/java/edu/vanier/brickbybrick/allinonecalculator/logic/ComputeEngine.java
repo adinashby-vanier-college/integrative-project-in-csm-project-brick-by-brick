@@ -4,9 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**
@@ -365,8 +368,14 @@ public class ComputeEngine {
         if (CONSTANTS.containsKey(symbol)) {
             return CONSTANTS.get(symbol);
         }
-        if (variables.containsKey(symbol)) {
-            return variables.get(symbol);
+
+        String strippedSymbol = symbol;
+        if (symbol.startsWith("\"") && symbol.endsWith("\"")) {
+            strippedSymbol = symbol.substring(1, symbol.length() - 1);
+        }
+        
+        if (variables.containsKey(strippedSymbol)) {
+            return variables.get(strippedSymbol);
         }
         // If it's not a constant or variable, return the symbol itself
         // This allows us to handle expressions like "x" in integrals and derivatives

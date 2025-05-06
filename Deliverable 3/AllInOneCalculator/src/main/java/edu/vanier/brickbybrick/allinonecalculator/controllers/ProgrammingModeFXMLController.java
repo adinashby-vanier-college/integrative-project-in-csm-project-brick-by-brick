@@ -230,6 +230,12 @@ public class ProgrammingModeFXMLController {
 
             variables.put(varName, varValue);
 
+            // add the variable to ComputeEngine
+            boolean success = logic.addVariableToComputeEngine(varName, varValue);
+            if (!success) {
+                logger.warn("Failed to add variable to ComputeEngine: " + varName + " = " + varValue + " (not a valid number)");
+            }
+
             updateVariablesUI();
 
             logger.info("Added variable: " + varName + " = " + varValue);

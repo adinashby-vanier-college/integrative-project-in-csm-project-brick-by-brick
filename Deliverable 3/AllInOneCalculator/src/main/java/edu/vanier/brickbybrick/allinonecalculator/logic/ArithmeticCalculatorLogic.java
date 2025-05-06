@@ -23,6 +23,23 @@ public class ArithmeticCalculatorLogic {
     private final ComputeEngine computeEngine = new ComputeEngine();
 
     /**
+     * Adds a variable to the ComputeEngine's variables.
+     * @param name The name of the variable
+     * @param value The value of the variable as a string
+     * @return true if the variable was added successfully, false otherwise
+     */
+    public boolean addVariableToComputeEngine(String name, String value) {
+        try {
+            double doubleValue = Double.parseDouble(value);
+            computeEngine.getVariables().put(name, doubleValue);
+            System.out.println(computeEngine.getVariables());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
      * Calculates the result of a mathematical expression.
      * @param expression The expression to calculate
      * @return The result of the calculation
