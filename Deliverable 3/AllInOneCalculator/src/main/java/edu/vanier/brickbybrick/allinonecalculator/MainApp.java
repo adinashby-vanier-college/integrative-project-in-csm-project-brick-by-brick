@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 public class MainApp extends Application {
     private final static Logger logger = LoggerFactory.getLogger(MainApp.class);
 
+    // The FXML file name of the login scene
+    public static final String LOGIN_SCENE = "login_layout";
     // The FXML file name of the main (welcome) scene of the application.
     public static final String MAIN_SCENE = "main_scene_layout";
     // The FXML file name of the arithmetic calculator.
@@ -27,6 +29,7 @@ public class MainApp extends Application {
     private static Scene scene;
     private static SceneController sceneController;
 
+    private static LoginFXMLController loginFXMLController;
     private static MainSceneFXMLController mainSceneController;
     private static ArithmeticCalculatorFXMLController arithmeticCalculatorController;
     private static GraphingCalculatorFXMLController graphingCalculatorController;
@@ -39,13 +42,13 @@ public class MainApp extends Application {
         // Set the primary stage.
         try {
             logger.info("Bootstrapping the application...");
-            // Load the scene of the primary stage.
-            mainSceneController = new MainSceneFXMLController();
-            Parent root = FxUIHelper.loadFXML(MAIN_SCENE, mainSceneController);
+            // Load the login scene first
+            loginFXMLController = new LoginFXMLController();
+            Parent root = FxUIHelper.loadFXML(LOGIN_SCENE, loginFXMLController);
             scene = new Scene(root, 800, 500);
             // Add the primary scene to the scene-switching controller.
             sceneController = new SceneController(scene);
-            sceneController.addScene(MAIN_SCENE, root);
+            sceneController.addScene(LOGIN_SCENE, root);
             primaryStage.setScene(scene);
             primaryStage.sizeToScene();
             primaryStage.setTitle("All In One Calculator, made by Brick by Brick");
@@ -53,7 +56,6 @@ public class MainApp extends Application {
             primaryStage.setAlwaysOnTop(true);
             primaryStage.show();
             primaryStage.setAlwaysOnTop(false);
-            switchScene(PROGRAMMING_MODE);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
             java.util.logging.Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,9 +79,20 @@ public class MainApp extends Application {
     public static void switchScene(String fxmlFileName) {
         try {
             switch (fxmlFileName) {
+                case LOGIN_SCENE -> {
+                    if (!sceneController.sceneExists(fxmlFileName)) {
+                        loginFXMLController = new LoginFXMLController();
+                        Parent root = FxUIHelper.loadFXML(fxmlFileName, loginFXMLController);
+                        sceneController.addScene(LOGIN_SCENE, root);
+                    }
+                    sceneController.activateScene(fxmlFileName);
+                }
                 case MAIN_SCENE -> {
-                    // No need to register the primary scene as it
-                    // was already done in the start method.
+                    if (!sceneController.sceneExists(fxmlFileName)) {
+                        mainSceneController = new MainSceneFXMLController();
+                        Parent root = FxUIHelper.loadFXML(fxmlFileName, mainSceneController);
+                        sceneController.addScene(MAIN_SCENE, root);
+                    }
                     sceneController.activateScene(fxmlFileName);
                 }
                 case ARITHMETIC_CALCULATOR -> {
